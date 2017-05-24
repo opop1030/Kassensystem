@@ -51,10 +51,11 @@ CREATE TABLE bestellung (
     zeit timestamp not null
     )ENGINE=INNODB;
 
-CREATE TABLE art_best_zuordnung (
-	zu_id int not null primary key auto_increment,
-    zu_bestell_id int,
-    zu_artikel_id int
+CREATE TABLE bestellpositionen (
+	bp_id int not null primary key auto_increment,
+    bp_bestell_id int,
+    bp_artikel_id int,
+    bp_menge int
 )ENGINE=INNODB;
     	
 ALTER TABLE angestellte
@@ -75,14 +76,14 @@ ALTER TABLE artikel
     ON DELETE RESTRICT
     ON UPDATE CASCADE;
     
-ALTER TABLE art_best_zuordnung 
-	ADD CONSTRAINT zu_best_fk FOREIGN KEY (zu_bestell_id)
+ALTER TABLE bestellpositionen 
+	ADD CONSTRAINT bp_bestellung_fk FOREIGN KEY (bp_bestell_id)
     REFERENCES bestellung(bestell_id)
     ON UPDATE CASCADE
     ON DELETE RESTRICT;
 
-ALTER TABLE art_best_zuordnung
-	ADD CONSTRAINT zu_art_fk FOREIGN KEY (zu_artikel_id)
+ALTER TABLE bestellpositionen
+	ADD CONSTRAINT bp_art_fk FOREIGN KEY (bp_artikel_id)
     REFERENCES artikel(art_id)
     ON DELETE RESTRICT
     ON UPDATE CASCADE;

@@ -1,24 +1,28 @@
-<?php if($status["shownavi"] === true){
-    echo '<div class="col-sm-3 nopadding menu">
-    <div class="menupoint">
+<?php
+$naviContent = "";
+if($status["shownavi"] === true)
+{
+    $naviContent.= '<ul class="col-sm-3 nopadding menu">
+    <li class="menupoint">
         <a> Kasse</a>
-    </div>
-    <div class="menupoint">
+    </li>
+    <li class="menupoint">
         <a>Vorbestellen</a>
-    </div>
-    <div class="menupoint">
+    </li>
+    <li class="menupoint">
         <a>Lager</a>
-    </div>
-    <div class="menupoint">
+    </li>
+    <li class="menupoint">
         <a>Kunden Verwalten</a>
-    </div>
+    </li>
     <!-- Kann nur der Admin -->
-    <div class="menupoint">
+    <li class="menupoint">
         <a>Mitarbeiter Verwalten</a>
-    </div>
-</div>';
+    </li>
+    </ul>';
 }
-else{
+else
+{
     echo '<h1>Dies ist keine Normale Seite</h1>';
 }
 ?>

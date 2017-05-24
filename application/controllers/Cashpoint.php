@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+//Cashpoint bedeutet auf Englisch Kasse, daher der Name :)
 class Cashpoint extends CI_Controller{
 
     private $data;
@@ -13,7 +14,7 @@ class Cashpoint extends CI_Controller{
 	{
 		if($this->session->login === true){
 			$userdata = array(
-				true,
+				false,
 				$this->session->username,
 			);
 		}

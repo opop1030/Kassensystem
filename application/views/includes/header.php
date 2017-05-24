@@ -94,6 +94,6 @@
 <body>
 <div class="wrapper">
     <div class="header row">
-        <h1 style="margin-top: 15px;">Mein Header jo</h1>
+        <h1 style="margin-top: 15px;">TanteEmmaLaden</h1>
     </div>
     <div class="page row">

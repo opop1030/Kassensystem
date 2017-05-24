@@ -1,4 +1,5 @@
-<div class="col-sm-3 nopadding menu">
+<?php if($status["shownavi"] === true){
+    echo '<div class="col-sm-3 nopadding menu">
     <div class="menupoint">
         <a> Kasse</a>
     </div>
@@ -15,4 +16,9 @@
     <div class="menupoint">
         <a>Mitarbeiter Verwalten</a>
     </div>
-</div>
+</div>';
+}
+else{
+    echo '<h1>Dies ist keine Normale Seite</h1>';
+}
+?>

@@ -13,8 +13,7 @@ class Home extends CI_Controller{
 	{
 		if($this->session->login === true){
 			$userdata = array(
-				true,
-				$this->session->username,
+				'username' => $this->session->username
 			);
 		}
 		else{
@@ -24,7 +23,7 @@ class Home extends CI_Controller{
 		$this->data['title'] = "Kassensystem Emma - Hauptseite";
 		$this->data['content'] = "content/Home_view.php";
 		$this->data['status'] = array(
-			'navi' => true,
+			'shownavi' => true,
             'login' => $userdata
 		);
 		$this->load->view('includes/content.php', $this->data);

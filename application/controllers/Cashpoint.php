@@ -1,7 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Home extends CI_Controller{
+//Cashpoint bedeutet auf Englisch Kasse, daher der Name :)
+class Cashpoint extends CI_Controller{
 
     private $data;
 
@@ -13,17 +14,18 @@ class Home extends CI_Controller{
 	{
 		if($this->session->login === true){
 			$userdata = array(
-				'username' => $this->session->username
+				false,
+				$this->session->username,
 			);
 		}
 		else{
 			$userdata = false;
 		}
 
-		$this->data['title'] = "Kassensystem Emma - Hauptseite";
+		$this->data['title'] = "Testseite - Template";
 		$this->data['content'] = "content/Home_view.php";
 		$this->data['status'] = array(
-			'shownavi' => true,
+			'navi' => true,
             'login' => $userdata
 		);
 		$this->load->view('includes/content.php', $this->data);

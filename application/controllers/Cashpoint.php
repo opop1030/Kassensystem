@@ -23,9 +23,9 @@ class Cashpoint extends CI_Controller{
 		}
 
 		$this->data['title'] = "Testseite - Template";
-		$this->data['content'] = "content/Home_view.php";
+		$this->data['content'] = "content/Cashpoint_view.php";
 		$this->data['status'] = array(
-			'navi' => true,
+			'shownavi' => true,
             'login' => $userdata
 		);
 		$this->load->view('includes/content.php', $this->data);

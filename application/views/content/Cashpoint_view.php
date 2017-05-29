@@ -1,7 +1,5 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: Andy
- * Date: 24.05.2017
- * Time: 12:50
- */
+<div>
+    <h1>Kassenbedienung</h1>
+    <hr/>
+    <p>hier entsteht die Kassenbedienung!</p>
+</div>

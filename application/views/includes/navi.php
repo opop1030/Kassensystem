@@ -1,28 +1,12 @@
 <?php
-$naviContent = "";
 if($status["shownavi"] === true)
 {
-    $naviContent.= '<ul class="col-sm-3 nopadding menu">
-    <li class="menupoint">
-        <a> Kasse</a>
-    </li>
-    <li class="menupoint">
-        <a>Vorbestellen</a>
-    </li>
-    <li class="menupoint">
-        <a>Lager</a>
-    </li>
-    <li class="menupoint">
-        <a>Kunden Verwalten</a>
-    </li>
-    <!-- Kann nur der Admin -->
-    <li class="menupoint">
-        <a>Mitarbeiter Verwalten</a>
-    </li>
-    </ul>';
-}
-else
-{
-    echo '<h1>Dies ist keine Normale Seite</h1>';
+    echo '<ul class="col-sm-3 nopadding menu" style="list-style-type: none;margin: 0;padding: 0;">';
+    echo '<li class="menupoint">'.anchor('cashpoint', 'Kasse').'</li>';
+    echo '<li class="menupoint">'.anchor('#', 'Vorbestellen').'</li>';
+    echo '<li class="menupoint">'.anchor('#', 'Lager').'</li>';
+    echo '<li class="menupoint">'.anchor('#', 'Kunden Verwalten').'</li>';
+    echo '<li class="menupoint">'.anchor('#', 'Mitarbeiter Verwalten').'</li>';
+    echo '</ul>';
 }
 ?>

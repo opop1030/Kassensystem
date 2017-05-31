@@ -8,7 +8,7 @@ class Login extends CI_Controller{
 	public function __construct()
 	{
 		parent::__construct();
-		if($this->session->login === true)
+		if(isset($this->session->login) === true)
 		{
 			redirect('home');
 		}
@@ -17,12 +17,13 @@ class Login extends CI_Controller{
 	public function index()
 	{
 		$this->data['title'] = "Testseite - Template";
-		$this->data['content'] = "content/Home_view.php";
+		$this->data['content'] = "content/Login_view.php";
 		$this->data['status'] = array
 		(
-			'navi' => true,
+			'shownavi' => false,
             'login' => ""
 		);
+		$this->data['special'] = null;
 		$this->load->view('includes/content.php', $this->data);
 	}
 }

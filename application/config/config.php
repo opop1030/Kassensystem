@@ -23,7 +23,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://tekassensystem.bplaced.net/';
+//$config['base_url'] = 'http://tekassensystem.bplaced.net/'; //Liveadresse für Bplaced
+$config['base_url'] = 'http://tekasse.dev/'; //Andys lokale adresse für XAMPP, nur Developement!
 
 /*
 |--------------------------------------------------------------------------

@@ -27,28 +27,27 @@ class Datahandler extends CI_Controller{
 	{
 		$userdata = $this->getLoginData();
 		$this->data['title'] = "Testseite - Template";
-		$this->data['content'] = "content/Home_view.php";
+		$this->data['content'] = "content/DataHandler_view.php";
 		$this->data['status'] = array(
-			'navi' => true,
+			'shownavi' => true,
             'login' => $userdata
 		);
+		$this->data['special'] = null;
 		$this->load->view('includes/content.php', $this->data);
 	}
 
 	public function show_bestellungen()
 	{
-		if(!isset($this->data))
-		{
-			redirect('home');
-		}
+
+	}
+
+	public function show_lager()
+	{
 
 	}
 
 	public function show_kunden()
 	{
-		if(!isset($this->data))
-		{
-			redirect('home');
-		}
+
 	}
 }

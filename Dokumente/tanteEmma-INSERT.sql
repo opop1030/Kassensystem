@@ -14,9 +14,10 @@ INSERT INTO person VALUES (0, 'Horstmann', 'Andreas', 'Baker Street', '221', '32
 INSERT INTO person VALUES (0, 'Moors', 'Martin', 'Schlossallee', '14', '37246', 'Köln', '022137246', 'moors@privat.de');
 
 INSERT INTO kunde VALUES ((SELECT person_id FROM person WHERE person.person_name = 'Horstmann'), (46.99));
+INSERT INTO kunde VALUES ((SELECT person_id FROM person WHERE person.person_name = 'Moors'), (290.76));
 
-INSERT INTO angestellte VALUES ((SELECT person_id FROM person WHERE person.person_name = 'Tahta'), 450.00);
-INSERT INTO angestellte VALUES ((SELECT person_id FROM person WHERE person.person_name = 'Derksen'), 2500.00);
+INSERT INTO angestellte VALUES ((SELECT person_id FROM person WHERE person.person_name = 'Tahta'), 450.00, 2, 'pwdTahta');
+INSERT INTO angestellte VALUES ((SELECT person_id FROM person WHERE person.person_name = 'Derksen'), 2500.00, 2, 'pwdDerksen');
 
 INSERT INTO art_kategorie VALUES ('Getränke');
 INSERT INTO art_kategorie VALUES ('Lebensmittel');

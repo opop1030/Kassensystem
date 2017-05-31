@@ -23,7 +23,9 @@ CREATE TABLE person (
     
 CREATE TABLE angestellte (
 	ang_id int,
-	ang_gehalt numeric(9,2) DEFAULT 0
+	ang_gehalt numeric(9,2) DEFAULT 0,
+    ang_rechte int default 0,
+    ang_passwort varchar(40)
 ) ENGINE=INNODB;
 
 CREATE TABLE kunde (

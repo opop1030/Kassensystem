@@ -7,27 +7,22 @@ class Logout extends CI_Controller{
 
 	public function __construct(){
 		parent::__construct();
+        if($this->session->login !== true)
+        {
+            redirect('login');
+        }
 	}
 
 	public function index()
 	{
-		if($this->session->login === true){
-			$userdata = array(
-				true,
-				$this->session->username,
-			);
-		}
-		else{
-			$userdata = false;
-		}
-
-		$this->data['title'] = "Testseite - Template";
+		$this->data['title'] = "TeKassensystem - Logout";
 		$this->data['content'] = "content/Home_view.php";
 		$this->data['status'] = array(
-			'shownavi' => true,
-            'login' => $userdata
+			'shownavi' => false,
+            'login' => false
 		);
-		$this->data['special'] = null;
+		$this->data['special'] = 'login';
+        $this->session->sess_destroy();
 		$this->load->view('includes/content.php', $this->data);
 	}
 }

@@ -2,6 +2,7 @@
 <html>
 <head>
     <title><?php echo $title ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
     <script src="../../../Bootstrap/js/jquery-1.12.4.js"></script>
     <script src="../../../Bootstrap/js/jquery.dataTables.min.js"></script>
     <script src="../../../Bootstrap/js/dataTables.bootstrap.min.js"></script>

@@ -6,22 +6,28 @@ class Cashpoint extends CI_Controller{
 
     private $data;
 
+	private function getLoginData(){
+		$userdata = null;
+		if($this->session->login === true){
+			$userdata = array(
+				true,
+				$this->session->username,
+			);
+		}
+		return $userdata;
+	}
+
 	public function __construct(){
 		parent::__construct();
+		if($this->session->login !== true)
+		{
+			redirect('login');
+		}
 	}
 
 	public function index()
 	{
-		if($this->session->login === true){
-			$userdata = array(
-				false,
-				$this->session->username,
-			);
-		}
-		else{
-			$userdata = false;
-		}
-
+		$userdata = $this->getLoginData();
 		$this->data['title'] = "Testseite - Template";
 		$this->data['content'] = "content/Cashpoint_view.php";
 		$this->data['status'] = array(

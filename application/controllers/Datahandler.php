@@ -16,38 +16,44 @@ class Datahandler extends CI_Controller{
 		return $userdata;
 	}
 
+    private function setPageData($titlesufix, $methodInfo = null)
+    {
+        $userdata = $this->getLoginData();
+        $this->data['title'] = "Kassensystem Emma - ".$titlesufix;
+        $this->data['content'] = "content/DataHandler_view.php";
+        $this->data['status'] = array(
+            'shownavi' => true,
+            'login' => $userdata
+        );
+        $this->data['special'] = $methodInfo;
+        $this->load->view('includes/content.php', $this->data);
+    }
+
 	public function __construct(){
 		parent::__construct();
-		if(!isset($userdata)){
-			redirect('home');
-		}
+        if($this->session->login !== true)
+        {
+            redirect('login');
+        }
 	}
 
 	public function index()
 	{
-		$userdata = $this->getLoginData();
-		$this->data['title'] = "Testseite - Template";
-		$this->data['content'] = "content/DataHandler_view.php";
-		$this->data['status'] = array(
-			'shownavi' => true,
-            'login' => $userdata
-		);
-		$this->data['special'] = null;
-		$this->load->view('includes/content.php', $this->data);
+		$this->setPageData("Hauptseite");
 	}
 
 	public function show_bestellungen()
 	{
-
+        $this->setPageData("Hauptseite", "bestellungen");
 	}
 
 	public function show_lager()
 	{
-
+        $this->setPageData("Hauptseite", "lager");
 	}
 
 	public function show_kunden()
 	{
-
+        $this->setPageData("Hauptseite", "kunden");
 	}
 }

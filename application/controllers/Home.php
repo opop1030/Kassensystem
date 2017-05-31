@@ -5,25 +5,28 @@ class Home extends CI_Controller{
 
     private $data;
 
-	public function __construct(){
+    private function getLoginData(){
+        $userdata = null;
+        if($this->session->login === true){
+            $userdata = array(
+                true,
+                $this->session->username,
+            );
+        }
+        return $userdata;
+    }
+
+    public function __construct(){
 		parent::__construct();
         if($this->session->login !== true)
         {
-            redirect('home');
+            redirect('login');
         }
 	}
 
 	public function index()
 	{
-		if($this->session->login === true){
-			$userdata = array(
-				'username' => $this->session->username
-			);
-		}
-		else{
-			$userdata = false;
-		}
-
+		$userdata = $this->getLoginData();
 		$this->data['title'] = "Kassensystem Emma - Hauptseite";
 		$this->data['content'] = "content/Home_view.php";
 		$this->data['status'] = array(

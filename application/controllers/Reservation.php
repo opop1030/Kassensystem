@@ -7,6 +7,10 @@ class Reservation extends CI_Controller{
 
 	public function __construct(){
 		parent::__construct();
+        if($this->session->login !== true)
+        {
+            redirect('login');
+        }
 	}
 
     private function getLoginData(){

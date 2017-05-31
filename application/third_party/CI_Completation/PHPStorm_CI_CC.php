@@ -78,6 +78,7 @@
 	 //* @property Example              $example               Example Class
 	 ***************** YOUR MODELS *****************
 	 //* @property example_model          $example_model           ,$example
+	 *  * @property EmployeeModel		$EmployeeModel		Model for employee data handling
 	 */
 	class CI_Controller {
 		public function __construct() {

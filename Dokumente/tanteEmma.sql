@@ -1,110 +1,122 @@
-DROP DATABASE IF EXISTS tanteEmma;
-create database tanteEmma;
-use tanteEmma;
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server Version:               10.1.13-MariaDB - mariadb.org binary distribution
+-- Server Betriebssystem:        Win32
+-- HeidiSQL Version:             9.3.0.4984
+-- --------------------------------------------------------
+-- Ich habe mal das Script was aufpoliert, da ich kleine Fehler entdeckt hatte.
+-- Liebe Grüße gez. Andy
 
-DROP TABLE IF EXISTS person;
-DROP TABLE IF EXISTS kunde;
-DROP TABLE IF EXISTS angestellte;
-DROP TABLE IF EXISTS artikel;
-DROP TABLE IF EXISTS bestellung;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+-- Exportiere Struktur von Tabelle tekassensystem.angestellte
+DROP TABLE IF EXISTS `angestellte`;
+CREATE TABLE IF NOT EXISTS `angestellte` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fi_person` int(11) NOT NULL,
+  `gehalt` decimal(9,2) DEFAULT '0.00',
+  `rechte` int(11) DEFAULT '0',
+  `passwort` varchar(40) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `person_angestellte_fk` (`fi_person`),
+  CONSTRAINT `person_angestellte_fk` FOREIGN KEY (`fi_person`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE person (
-	person_id int not null primary key auto_increment,
-    person_name varchar(40) not null,
-    person_vname varchar(40) not null,
-    person_strasse varchar(40) not null,
-    person_hausnr numeric(38) not null,
-    person_plz numeric(38) not null,
-    person_ort varchar(40) not null,
-    person_tel numeric(38) not null,
-    person_email varchar(50) not null
-) ENGINE=INNODB;
-    
-CREATE TABLE angestellte (
-	ang_id int,
-	ang_gehalt numeric(9,2) DEFAULT 0,
-    ang_rechte int default 0,
-    ang_passwort varchar(40)
-) ENGINE=INNODB;
-
-CREATE TABLE kunde (
-	kunde_id int,
-    kunde_umsatz numeric(9,2) DEFAULT 0
-) ENGINE=INNODB;
-
-CREATE TABLE artikel (
-	art_id int not null primary key auto_increment ,
-    art_name varchar (100) not null,
-    art_kategorie varchar(50) not null,
-    art_bestand int default 0,
-    art_preis numeric(9,2) not null
-) ENGINE=INNODB;
-
-CREATE TABLE art_kategorie (
-	art_kat_name varchar(40) not null primary key
-) ENGINE=INNODB;
-    
-CREATE TABLE bestellung (
-	bestell_id	int not null primary key auto_increment,
-    kunde_id int not null,
-    ang_id int not null,
-    datum date not null,
-    zeit timestamp not null
-    )ENGINE=INNODB;
-
-CREATE TABLE bestellpositionen (
-	bp_id int not null primary key auto_increment,
-    bp_bestell_id int,
-    bp_artikel_id int,
-    bp_menge int
-)ENGINE=INNODB;
-    	
-ALTER TABLE angestellte
-	ADD CONSTRAINT ang_id_fk FOREIGN KEY(ang_id)
-    REFERENCES person(person_id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE;
-
-ALTER TABLE kunde
-	ADD CONSTRAINT kunde_id_fk FOREIGN KEY(kunde_id)
-    REFERENCES person(person_id)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE;
-
-ALTER TABLE artikel 
-	ADD CONSTRAINT art_kat_fk FOREIGN KEY(art_kategorie)
-	REFERENCES art_kategorie(art_kat_name)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE;
-    
-ALTER TABLE bestellpositionen 
-	ADD CONSTRAINT bp_bestellung_fk FOREIGN KEY (bp_bestell_id)
-    REFERENCES bestellung(bestell_id)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT;
-
-ALTER TABLE bestellpositionen
-	ADD CONSTRAINT bp_art_fk FOREIGN KEY (bp_artikel_id)
-    REFERENCES artikel(art_id)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE;
-    
-ALTER TABLE bestellung
-	ADD CONSTRAINT best_kunde_fk FOREIGN KEY (kunde_id)
-    REFERENCES kunde(kunde_id)
-	ON UPDATE CASCADE
-    ON DELETE RESTRICT;
-    
-ALTER TABLE bestellung
-	ADD CONSTRAINT best_ang_fk FOREIGN KEY (ang_id)
-    REFERENCES angestellte(ang_id)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT;
-    
-
-    
-    
+-- Daten Export vom Benutzer nicht ausgewählt
 
 
+-- Exportiere Struktur von Tabelle tekassensystem.artikel
+DROP TABLE IF EXISTS `artikel`;
+CREATE TABLE IF NOT EXISTS `artikel` (
+  `artikelnr` varchar(16) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `fi_kategorie` varchar(40) NOT NULL,
+  `bestand` int(11) DEFAULT '0',
+  `preis` decimal(9,2) NOT NULL,
+  PRIMARY KEY (`artikelnr`),
+  KEY `art_kat_fk` (`fi_kategorie`),
+  CONSTRAINT `art_kat_fk` FOREIGN KEY (`fi_kategorie`) REFERENCES `art_kategorie` (`bezeichnung`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+-- Daten Export vom Benutzer nicht ausgewählt
+
+
+-- Exportiere Struktur von Tabelle tekassensystem.art_kategorie
+DROP TABLE IF EXISTS `art_kategorie`;
+CREATE TABLE IF NOT EXISTS `art_kategorie` (
+  `bezeichnung` varchar(40) NOT NULL,
+  PRIMARY KEY (`bezeichnung`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Daten Export vom Benutzer nicht ausgewählt
+
+
+-- Exportiere Struktur von Tabelle tekassensystem.bestellpositionen
+DROP TABLE IF EXISTS `bestellpositionen`;
+CREATE TABLE IF NOT EXISTS `bestellpositionen` (
+  `id_fi_bestellung` int(11) NOT NULL,
+  `id_fi_artikel` varchar(16) NOT NULL,
+  `menge` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_fi_bestellung`,`id_fi_artikel`),
+  KEY `bp_art_fk` (`id_fi_artikel`),
+  KEY `bp_bestell_fk` (`id_fi_bestellung`),
+  CONSTRAINT `bp_art_fk` FOREIGN KEY (`id_fi_artikel`) REFERENCES `artikel` (`artikelnr`) ON UPDATE CASCADE,
+  CONSTRAINT `bp_bestellung_fk` FOREIGN KEY (`id_fi_bestellung`) REFERENCES `bestellung` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Daten Export vom Benutzer nicht ausgewählt
+
+
+-- Exportiere Struktur von Tabelle tekassensystem.bestellung
+DROP TABLE IF EXISTS `bestellung`;
+CREATE TABLE IF NOT EXISTS `bestellung` (
+  `id` int(11) NOT NULL,
+  `fi_kunde` int(11) NOT NULL,
+  `fi_angestellter` int(11) NOT NULL,
+  `datum` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `best_kunde_fk` (`fi_kunde`),
+  KEY `best_ang_fk` (`fi_angestellter`),
+  CONSTRAINT `best_ang_fk` FOREIGN KEY (`fi_angestellter`) REFERENCES `angestellte` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `best_kunde_fk` FOREIGN KEY (`fi_kunde`) REFERENCES `kunde` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Daten Export vom Benutzer nicht ausgewählt
+
+
+-- Exportiere Struktur von Tabelle tekassensystem.kunde
+DROP TABLE IF EXISTS `kunde`;
+CREATE TABLE IF NOT EXISTS `kunde` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fi_person` int(11) NOT NULL,
+  `umsatz` decimal(9,2) DEFAULT '0.00',
+  PRIMARY KEY (`id`),
+  KEY `person_kunde_fk` (`fi_person`),
+  CONSTRAINT `person_kunde_fk` FOREIGN KEY (`fi_person`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Daten Export vom Benutzer nicht ausgewählt
+
+
+-- Exportiere Struktur von Tabelle tekassensystem.person
+DROP TABLE IF EXISTS `person`;
+CREATE TABLE IF NOT EXISTS `person` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(40) NOT NULL,
+  `vname` varchar(40) NOT NULL,
+  `strasse` varchar(40) NOT NULL,
+  `hausnr` decimal(38,0) NOT NULL,
+  `plz` decimal(38,0) NOT NULL,
+  `ort` varchar(40) NOT NULL,
+  `tel` decimal(38,0) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Daten Export vom Benutzer nicht ausgewählt
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

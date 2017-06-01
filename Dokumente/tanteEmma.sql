@@ -12,14 +12,15 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
+use tekassensystem;
+
 -- Exportiere Struktur von Tabelle tekassensystem.angestellte
-DROP TABLE IF EXISTS `angestellte`;
 CREATE TABLE IF NOT EXISTS `angestellte` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fi_person` int(11) NOT NULL,
   `gehalt` decimal(9,2) DEFAULT '0.00',
   `rechte` int(11) DEFAULT '0',
-  `passwort` varchar(40) DEFAULT NULL,
+  `passwort` varchar(40) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `person_angestellte_fk` (`fi_person`),
   CONSTRAINT `person_angestellte_fk` FOREIGN KEY (`fi_person`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -29,7 +30,6 @@ CREATE TABLE IF NOT EXISTS `angestellte` (
 
 
 -- Exportiere Struktur von Tabelle tekassensystem.artikel
-DROP TABLE IF EXISTS `artikel`;
 CREATE TABLE IF NOT EXISTS `artikel` (
   `artikelnr` varchar(16) NOT NULL,
   `name` varchar(64) NOT NULL,
@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS `artikel` (
 
 
 -- Exportiere Struktur von Tabelle tekassensystem.art_kategorie
-DROP TABLE IF EXISTS `art_kategorie`;
 CREATE TABLE IF NOT EXISTS `art_kategorie` (
   `bezeichnung` varchar(40) NOT NULL,
   PRIMARY KEY (`bezeichnung`)
@@ -55,7 +54,6 @@ CREATE TABLE IF NOT EXISTS `art_kategorie` (
 
 
 -- Exportiere Struktur von Tabelle tekassensystem.bestellpositionen
-DROP TABLE IF EXISTS `bestellpositionen`;
 CREATE TABLE IF NOT EXISTS `bestellpositionen` (
   `id_fi_bestellung` int(11) NOT NULL,
   `id_fi_artikel` varchar(16) NOT NULL,
@@ -71,12 +69,11 @@ CREATE TABLE IF NOT EXISTS `bestellpositionen` (
 
 
 -- Exportiere Struktur von Tabelle tekassensystem.bestellung
-DROP TABLE IF EXISTS `bestellung`;
 CREATE TABLE IF NOT EXISTS `bestellung` (
   `id` int(11) NOT NULL,
   `fi_kunde` int(11) NOT NULL,
   `fi_angestellter` int(11) NOT NULL,
-  `datum` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `datum` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `best_kunde_fk` (`fi_kunde`),
   KEY `best_ang_fk` (`fi_angestellter`),
@@ -88,7 +85,6 @@ CREATE TABLE IF NOT EXISTS `bestellung` (
 
 
 -- Exportiere Struktur von Tabelle tekassensystem.kunde
-DROP TABLE IF EXISTS `kunde`;
 CREATE TABLE IF NOT EXISTS `kunde` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fi_person` int(11) NOT NULL,
@@ -102,7 +98,6 @@ CREATE TABLE IF NOT EXISTS `kunde` (
 
 
 -- Exportiere Struktur von Tabelle tekassensystem.person
-DROP TABLE IF EXISTS `person`;
 CREATE TABLE IF NOT EXISTS `person` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(40) NOT NULL,

@@ -8,7 +8,7 @@ class Login extends CI_Controller{
 	public function __construct()
 	{
 		parent::__construct();
-		if(isset($this->session->login) === true)
+		if($this->session->login === true)
 		{
 			redirect('home');
 		}
@@ -38,7 +38,7 @@ class Login extends CI_Controller{
             if(isset($result)&& $result !== false){
                 $userdata = array(
                     "login" => true,
-                    "username" => $result->id,
+                    "username" => $result->name,
                     "code" => $result->status
                 );
                 $this->session->set_userdata($userdata);

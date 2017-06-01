@@ -13,7 +13,7 @@
 <div>
     <h1>Login!</h1>
     <hr/>
-    <?php echo form_open('Login/login');
+    <?php echo form_open('Login/userlogin');
     echo form_label('Username','username');
     echo form_input('username', set_value('username','Username'), 'id=username');?>
     <p></p>

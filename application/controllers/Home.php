@@ -28,7 +28,7 @@ class Home extends CI_Controller{
 	{
 		$userdata = $this->getLoginData();
 		$this->data['title'] = "Kassensystem Emma - Hauptseite";
-		$this->data['content'] = "content/Home_view.php";
+		$this->data['content'] = "content/Home_View.php";
 		$this->data['status'] = array(
 			'shownavi' => true,
             'login' => $userdata

@@ -16,8 +16,8 @@ class Login extends CI_Controller{
 
 	public function index()
 	{
-		$this->data['title'] = "Testseite - Template";
-		$this->data['content'] = "content/Login_view.php";
+		$this->data['title'] = "Kassesystem Emma - Login";
+		$this->data['content'] = "content/Login_View.php";
 		$this->data['status'] = array
 		(
 			'shownavi' => false,

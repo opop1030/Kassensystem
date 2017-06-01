@@ -28,7 +28,7 @@ class Reservation extends CI_Controller{
 	{
         $userdata = $this->getLoginData();
 		$this->data['title'] = "Testseite - Template";
-		$this->data['content'] = "content/Home_view.php";
+		$this->data['content'] = "content/Home_View.php";
 		$this->data['status'] = array(
 			'navi' => true,
             'login' => $userdata

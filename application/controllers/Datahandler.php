@@ -5,16 +5,17 @@ class Datahandler extends CI_Controller{
 
     private $data;
 
-	private function getLoginData(){
-		$userdata = null;
-		if($this->session->login === true){
-			$userdata = array(
-				true,
-				$this->session->username,
-			);
-		}
-		return $userdata;
-	}
+    private function getLoginData(){
+        $userdata = null;
+        if($this->session->login === true){
+            $userdata = array(
+                $this->session->login,
+                $this->session->username,
+                $this->session->code
+            );
+        }
+        return $userdata;
+    }
 
     private function setPageData($titlesufix, $methodInfo = null)
     {
@@ -39,21 +40,33 @@ class Datahandler extends CI_Controller{
 
 	public function index()
 	{
-		$this->setPageData("Hauptseite");
+		$this->setPageData("Anzeige");
 	}
 
 	public function show_bestellungen()
 	{
-        $this->setPageData("Hauptseite", "bestellungen");
+        $this->setPageData("Bestellungs&uuml;bersicht", "bestellungen");
 	}
 
 	public function show_lager()
 	{
-        $this->setPageData("Hauptseite", "lager");
+        $this->setPageData("Lager&uuml;bersicht", "lager");
 	}
 
 	public function show_kunden()
 	{
-        $this->setPageData("Hauptseite", "kunden");
+        $temp = $this->session->code;
+        if(!$temp > 0 && !$temp <= 2){
+            redirect('home');
+        }
+        $this->setPageData("Kunden&uuml;bersicht", "kunden");
+	}
+
+	public function show_mitarbeiter()
+	{
+        if($this->session->code != 2){
+            redirect('home');
+        }
+		$this->setPageData("Mitarbeiter&uuml;bersicht", "mitarbeiter");
 	}
 }

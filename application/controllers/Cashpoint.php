@@ -10,8 +10,9 @@ class Cashpoint extends CI_Controller{
 		$userdata = null;
 		if($this->session->login === true){
 			$userdata = array(
-				true,
+				$this->session->login,
 				$this->session->username,
+				$this->session->code
 			);
 		}
 		return $userdata;
@@ -34,6 +35,7 @@ class Cashpoint extends CI_Controller{
 			'shownavi' => true,
             'login' => $userdata
 		);
+		$this->data['special'] = null;
 		$this->load->view('includes/content.php', $this->data);
 	}
 }

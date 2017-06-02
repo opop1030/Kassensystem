@@ -40,10 +40,15 @@
             text-align: left;
         }
 
+        .menutext{
+            width: 100%;
+            padding: 10px 10px 10px 10px;
+            background-color: #f4f8ff;
+        }
+
         .menupoint{
             width: 100%;
             padding: 10px 10px 10px 10px;
-
         }
         .menupoint:hover {
             animation-name: menupunktanimation;

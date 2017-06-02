@@ -17,8 +17,9 @@ class Reservation extends CI_Controller{
         $userdata = null;
         if($this->session->login === true){
             $userdata = array(
-                true,
+                $this->session->login,
                 $this->session->username,
+                $this->session->code
             );
         }
         return $userdata;
@@ -30,7 +31,7 @@ class Reservation extends CI_Controller{
 		$this->data['title'] = "Testseite - Template";
 		$this->data['content'] = "content/Home_View.php";
 		$this->data['status'] = array(
-			'navi' => true,
+			'shownavi' => true,
             'login' => $userdata
 		);
 		$this->data['special'] = null;

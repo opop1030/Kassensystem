@@ -19,7 +19,7 @@ class Logout extends CI_Controller{
 		$this->data['content'] = "content/Logout_view.php";
 		$this->data['status'] = array(
 			'shownavi' => false,
-            'login' => false
+            'login' => array(false, "", 0)
 		);
 		$this->data['special'] = 'login';
         $this->session->sess_destroy();

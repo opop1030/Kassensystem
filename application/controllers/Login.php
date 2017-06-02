@@ -21,7 +21,7 @@ class Login extends CI_Controller{
 		$this->data['status'] = array
 		(
 			'shownavi' => false,
-            'login' => ""
+            'login' => array(false, "", 0)
 		);
 		$this->data['special'] = null;
 		$this->load->view('includes/content.php', $this->data);
@@ -39,7 +39,7 @@ class Login extends CI_Controller{
                 $userdata = array(
                     "login" => true,
                     "username" => $result->name,
-                    "code" => $result->status
+                    "code" => $result->rechte
                 );
                 $this->session->set_userdata($userdata);
                 redirect("home");

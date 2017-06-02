@@ -15,8 +15,8 @@ class Logout extends CI_Controller{
 
 	public function index()
 	{
-		$this->data['title'] = "TeKassensystem - Logout";
-		$this->data['content'] = "content/Logout_view.php";
+		$this->data['title'] = "TeKassensystem Emma - Logout";
+		$this->data['content'] = "content/Logout_View.php";
 		$this->data['status'] = array(
 			'shownavi' => false,
             'login' => array(false, "", 0)

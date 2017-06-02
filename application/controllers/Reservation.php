@@ -28,8 +28,8 @@ class Reservation extends CI_Controller{
 	public function index()
 	{
         $userdata = $this->getLoginData();
-		$this->data['title'] = "Testseite - Template";
-		$this->data['content'] = "content/Home_View.php";
+		$this->data['title'] = "Kassensystem Emma - Vorbestellungen";
+		$this->data['content'] = "content/Reservation_View.php";
 		$this->data['status'] = array(
 			'shownavi' => true,
             'login' => $userdata

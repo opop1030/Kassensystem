@@ -29,8 +29,8 @@ class Cashpoint extends CI_Controller{
 	public function index()
 	{
 		$userdata = $this->getLoginData();
-		$this->data['title'] = "Testseite - Template";
-		$this->data['content'] = "content/Cashpoint_view.php";
+		$this->data['title'] = "Kassensystem Emma - Kasse";
+		$this->data['content'] = "content/Cashpoint_View.php";
 		$this->data['status'] = array(
 			'shownavi' => true,
             'login' => $userdata

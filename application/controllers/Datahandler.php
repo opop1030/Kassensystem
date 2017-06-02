@@ -21,7 +21,7 @@ class Datahandler extends CI_Controller{
     {
         $userdata = $this->getLoginData();
         $this->data['title'] = "Kassensystem Emma - ".$titlesufix;
-        $this->data['content'] = "content/DataHandler_View.php";
+        $this->data['content'] = "content/Datahandler_View.php";
         $this->data['status'] = array(
             'shownavi' => true,
             'login' => $userdata

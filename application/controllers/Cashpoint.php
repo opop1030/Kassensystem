@@ -27,27 +27,10 @@ class Cashpoint extends CI_Controller{
         else
         {
             $this->itemList = array(
-                array("name"=>"Testitem","kosten"=>2),
-                array("name"=>"Testitem2","kosten"=>5),
-                array("name"=>"Testitem3","kosten"=>1)
+                array("id"=>1,"name"=>"Testitem","cost"=>2,"amount"=>1),
+                array("id"=>2,"name"=>"Testitem2","cost"=>5,"amount"=>1),
+                array("id"=>3,"name"=>"Testitem3","cost"=>1,"amount"=>1)
             );
-        }
-    }
-
-    public function addItem($amount = 1)
-    {
-        $search = array_search($this->input->post('scan'), array_column($this->itemList, 'id'));
-        if($search !== null) {
-            $this->itemList[$search]["menge"] += $amount;
-        }
-        else{
-            $item = array(
-                "id" => "",
-                "name" => "",
-                "kosten" => 0,
-                "menge" => 1
-            );
-            array_push($this->itemList, $item);
         }
     }
 
@@ -75,14 +58,44 @@ class Cashpoint extends CI_Controller{
 		$this->load->view('includes/content.php', $this->data);
 	}
 
+    public function addItem($amount = 1)
+    {
+        $search = array_search($this->input->post('scan'), array_column($this->itemList, 'id'));
+        if($search !== null)
+        {
+            $this->itemList[$search]["amount"] += $amount;
+        }
+        else
+        {
+            $this->load->model("ItemModel");
+            $item = $this->ItemModel->getItemData($this->input->post("scan"));
+            if (isset($item))
+            {
+                array_push($this->itemList, $item);
+            }
+        }
+        $this->session->set_userdata('datalist', $this->itemList);
+        redirect('Cashpoint');
+}
+
     //"button" zum löschen von einträgen der Liste
     public function removeItem($id)
     {
-
+        //löschen des Elements aus der Liste
+        //aktualisieren der Sessiondaten
+        redirect('Cashpoint');
     }
 
+    //"Button" zum abschliessen einer Bestellung
 	public function sendShoppingCart()
     {
-
+        if($this->input->post('isPreorder') === true)
+        {
+            $this->load->model("OrderModel");
+            $this->OrderModel->addOrder($this->itemList, 1, 1);
+        }
+        //entfernen der Items aus dem Lager
+        $this->session->unset_userdata('datalist');
+        redirect('Cashpoint');
 	}
 }

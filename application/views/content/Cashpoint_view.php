@@ -1,13 +1,30 @@
-<div>
-    <h1>Kassenbedienung</h1>
-    <hr/>
-    <p>hier entsteht die Kassenbedienung!</p>
-</div>
-<div>
+<div class="nopadding content">
     <?php
-        foreach($special as $item)
-        {
-            echo $item["name"]." I ".$item["kosten"]."<br/>";
-        }
+    echo form_open('Cashpoint/addItem');
+    echo '<br/>';
+    echo form_label('Artikelnummer', 'scan');
+    echo '<br/>';
+    echo form_input('scan', set_value('scan', ''), 'id=scan autofocus');
+    echo '<br/>';
+    echo '<br/>';
+    $this->table->set_heading(array('Name', 'Price', 'Amount'));
+    $price = 0;
+    foreach($special as $item)
+    {
+        $this->table->add_row($item["name"], $item["cost"], $item["amount"], anchor('Cashpoint/removeItem/'.$item["id"], 'L&ouml;schen'));
+        $price += $item["cost"] * $item["amount"];
+    }
+    echo $this->table->generate();
+    echo '<br/>';
+    echo '<br/>';
+    echo '<p>Gesammtbetrag: '.$price.'&euro;</p>';
+    echo '<br/>';
+    echo form_label('Vorbestellung?', 'isPreorder');
+    echo form_checkbox('isPreorder', 'preorder', false);
+    echo '<br/>';
+    echo '<br/>';
+    echo anchor('Cashpoint/sendShoppingCart', 'Eintrag abschicken');
+    echo '<br/>';
+    echo form_close();
     ?>
 </div>

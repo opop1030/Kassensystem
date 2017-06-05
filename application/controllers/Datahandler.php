@@ -17,7 +17,7 @@ class Datahandler extends CI_Controller{
         return $userdata;
     }
 
-    private function setPageData($titlesufix, $methodInfo = null)
+    private function setPageData($titlesufix, $methodInfo = null, $table = "")
     {
         $userdata = $this->getLoginData();
         $this->data['title'] = "Kassensystem Emma - ".$titlesufix;
@@ -26,7 +26,7 @@ class Datahandler extends CI_Controller{
             'shownavi' => true,
             'login' => $userdata
         );
-        $this->data['special'] = $methodInfo;
+        $this->data['special'] = array("method" => $methodInfo, "table"=>$table);
         $this->load->view('includes/content.php', $this->data);
     }
 

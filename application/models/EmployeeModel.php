@@ -27,6 +27,9 @@ class EmployeeModel extends CI_Model{
     {
         //hier wird ein neuer angestellter eingefügt, allerdings ohne brechtigungen und ohne gehalt
         //weitere infos werden auch fürs erste nicht nötig sein
+        //Schritt 1 person erzeugen
+        //Schritt 2 ID raussuchen
+        //Schritt 3 Mitarbeiter schreiben, mit berechtigung 0
     }
 
     public function delete($employeeId)

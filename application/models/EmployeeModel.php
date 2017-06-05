@@ -23,6 +23,23 @@ class EmployeeModel extends CI_Model{
         }
     }
 
+    public function  getEmployeeByName($name)
+    {
+        $q = $this
+            ->db
+            ->select("angestellte.id")
+            ->join("person", "person.id = angestellte.fi_person")
+            ->where("person.name", $name)
+            ->limit(1)
+            ->get("angestellte");
+        if($q->result()!=null){
+            return $q->row(0);
+        }
+        else{
+            return false;
+        }
+    }
+
     public function create($name, $pwd)
     {
         //hier wird ein neuer angestellter eingefügt, allerdings ohne brechtigungen und ohne gehalt

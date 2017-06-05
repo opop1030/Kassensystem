@@ -12,11 +12,18 @@ class ItemModel extends CI_Model{
             ->where("artikelnr", $id)
             ->limit(1)
             ->get("artikel");
-        return $q->row(0);
+        if($q->result() !== null) {
+            return $q->row(0);
+        }
+        else{
+            return null;
+        }
     }
 
     public function addItem($id, $price, $amount){
-
+        $q = $this
+            ->db
+            ->insert("artikel", array("artikelnr"=>$id, ""));
     }
 
     public function deleteItem($id){

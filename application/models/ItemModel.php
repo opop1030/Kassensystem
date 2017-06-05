@@ -20,13 +20,20 @@ class ItemModel extends CI_Model{
         }
     }
 
-    public function addItem($id, $price, $amount){
-        $q = $this
-            ->db
-            ->insert("artikel", array("artikelnr"=>$id, ""));
+    public function addItem($id, $name, $kategorie, $price, $amount){
+        $this->db->insert("artikel", array("artikelnr"=>$id, "name"=>$name, "fi_kategorie"=>$kategorie, "bestand"=>$amount, "preis"=>$price));
     }
 
     public function deleteItem($id){
+        $this->db->delete("artikel", "artikelnr = ".$id);
+    }
 
+    public function getCurrendAmountById($id){
+        $currendAmount = $this
+            ->db
+            ->select("menge")
+            ->where("artikelnr", $id)
+            ->get("artikel")->row(0);
+        return $currendAmount;
     }
 }

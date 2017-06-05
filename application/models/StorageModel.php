@@ -6,15 +6,7 @@ class StorageModel extends CI_Model{
         parent::__construct();
     }
 
-    public function takeItem($id, $amount){
-
-    }
-
-    public function refillItem($id, $amount){
-
-    }
-
-    public function getItemAmount($id){
-
+    public function setAmount($id, $newAmount){
+        $this->db->where("artikelnr", $id)->set("menge", $newAmount)->update("artikel");
     }
 }

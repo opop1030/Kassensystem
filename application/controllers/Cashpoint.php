@@ -45,7 +45,6 @@ class Cashpoint extends CI_Controller{
 		{
 			redirect('login');
 		}
-        $this->load->model("OrderModel");
         $this->refreshList();
 	}
 
@@ -62,12 +61,16 @@ class Cashpoint extends CI_Controller{
 		$this->load->view('includes/content.php', $this->data);
 	}
 
-    public function addItem($amount = 1)
+    public function addItem()
     {
         $search = array_search($this->input->post('scan'), array_column($this->itemList, 'id'));
         if($search !== false)
         {
-            $this->itemList[$search]["amount"] += $amount;
+            $item = $this->itemList[$search];
+            if($item["max"]>= $item["amount"]+1) {
+                $item["amount"] += 1;
+            }
+            $this->itemList[$search] = $item;
         }
         else
         {
@@ -75,13 +78,16 @@ class Cashpoint extends CI_Controller{
             $item = $this->ItemModel->getItemData($this->input->post("scan"));
             if (isset($item))
             {
-                $result = array(
-                    "id" => $item->artikelnr,
-                    "name" => $item->name,
-                    "cost" => $item->preis,
-                    "amount" => 1
-                );
-                array_push($this->itemList, $result);
+                if($this->ItemModel->isItemAvailable()===true) {
+                    $result = array(
+                        "id" => $item->artikelnr,
+                        "name" => $item->name,
+                        "cost" => $item->preis,
+                        "amount" => 1,
+                        "max" => $item->bestand
+                    );
+                    array_push($this->itemList, $result);
+                }
             }
             else{
                 redirect('Cashpoint');
@@ -111,16 +117,14 @@ class Cashpoint extends CI_Controller{
             $this->load->model("OrderModel");
             $this->load->model("EmployeeModel");
             $employeeId = $this->EmployeeModel->getEmployeeByName($this->session->username);
-            $this->OrderModel->addOrder($this->itemList, 1, $employeeId);
+            $userId = $this->getLoginData()["code"];
+            $this->OrderModel->addOrder($this->itemList, $userId, $employeeId);
         }
-        else{
-
+        $this->load->model("ItemModel");
+        foreach($this->itemList as $item){
+            $this->ItemModel->setCurrendAmountById($item["id"], $item["amount"]*-1);
         }
-	}
-
-    public function clearCashpoint()
-    {
         $this->session->unset_userdata('datalist');
         redirect('Cashpoint');
-    }
+	}
 }

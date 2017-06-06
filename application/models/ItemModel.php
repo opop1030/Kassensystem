@@ -28,6 +28,16 @@ class ItemModel extends CI_Model{
         $this->db->delete("artikel", "artikelnr = ".$id);
     }
 
+    public function isItemAvailable($id){
+        $currendAmount = $this->getCurrendAmountById($id);
+        if($currendAmount > 0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public function getCurrendAmountById($id){
         $currendAmount = $this
             ->db
@@ -35,5 +45,11 @@ class ItemModel extends CI_Model{
             ->where("artikelnr", $id)
             ->get("artikel")->row(0);
         return $currendAmount;
+    }
+
+    public function setCurrendAmountById($id, $difference){
+        $currendAmount = $this->getCurrendAmountById($id);
+        $newAmount = $currendAmount - $difference;
+        $this->db->where("artikelnr", $id)->set("menge", $newAmount)->update("artikel");
     }
 }

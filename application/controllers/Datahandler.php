@@ -17,16 +17,17 @@ class Datahandler extends CI_Controller{
         return $userdata;
     }
 
-    private function setPageData($titlesufix, $methodInfo = null, $table = "")
+    private function setPageData($titleaddon, $view, $tableheader, $tabledata)
     {
         $userdata = $this->getLoginData();
-        $this->data['title'] = "Kassensystem Emma - ".$titlesufix;
-        $this->data['content'] = "content/Datahandler_View.php";
+        $this->data['title'] = "Kassensystem Emma - ".$titleaddon;
+        $this->data['content'] = $view;
+        $this->data['tableheader'] = $tableheader;
+        $this->data['tabledata'] = $this->table->generate($tabledata);
         $this->data['status'] = array(
             'shownavi' => true,
             'login' => $userdata
         );
-        $this->data['special'] = array("method" => $methodInfo, "table"=>$table);
         $this->load->view('includes/content.php', $this->data);
     }
 
@@ -40,12 +41,12 @@ class Datahandler extends CI_Controller{
 
 	public function index()
 	{
-		$this->setPageData("Anzeige");
+		redirect('home');
 	}
 
 	public function show_bestellungen()
 	{
-        $this->setPageData("Bestellungs&uuml;bersicht", "bestellungen");
+        $this->setPageData("Bestellungs&uuml;bersicht", "content/");
 	}
 
 	public function show_lager()

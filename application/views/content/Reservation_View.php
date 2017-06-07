@@ -4,13 +4,7 @@
     echo '<br/>';
     echo form_label('Kunde :','costumer');
     echo '<br/>';
-    $namelist = array();
-    $idlist = array();
-    foreach($special["costumers"] as $costumer){
-        array_push($namelist,$costumer["name"]);
-        array_push($idlist,$costumer["id"]);
-    }
-    echo form_dropdown('costumer', $special["costumers"]["name"], $special["costumers"]["id"]);
+    echo form_dropdown('costumer', $select);
     echo '<br/>';
     $this->table->set_heading(array('Name', 'Price', 'Amount'));
     $price = 0;

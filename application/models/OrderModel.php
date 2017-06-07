@@ -10,7 +10,7 @@ class OrderModel extends CI_Model{
         $q = $this
             ->db
             ->get("bestellung");
-        return $q->last_row("id");
+        return $q->last_row()->id;
     }
 
     public function addOrder($itemList, $idCostumer, $idEmployee){

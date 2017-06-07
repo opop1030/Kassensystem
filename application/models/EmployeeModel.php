@@ -32,12 +32,8 @@ class EmployeeModel extends CI_Model{
             ->where("person.name", $name)
             ->limit(1)
             ->get("angestellte");
-        if($q->result()!=null){
-            return $q->row(0);
-        }
-        else{
-            return false;
-        }
+
+        return $q->result_array()[0]["id"];
     }
 
     public function create($name, $pwd)

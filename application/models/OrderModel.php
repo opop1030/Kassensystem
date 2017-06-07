@@ -16,7 +16,7 @@ class OrderModel extends CI_Model{
     public function addOrder($itemList, $idCostumer, $idEmployee){
         $qOrder = $this
             ->db
-            ->insert("bestellung",array("id"=>null, "fi_kunde"=>$idCostumer, "fi_angestellter"=>$idEmployee));
+            ->insert("bestellung",array("id"=>"NULL", "fi_kunde"=>$idCostumer, "fi_angestellter"=>$idEmployee, "datum"=>"NOW()"/*mdate("%d-%m-%Y %H:%i:%s", now())*/), FALSE);
         if($qOrder == true) {
             $idList = array();
             foreach ($itemList as $item) {

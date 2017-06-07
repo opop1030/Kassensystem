@@ -122,7 +122,7 @@ class Cashpoint extends CI_Controller{
             'login' => $userdata
         );
         $this->load->model("CostumerModel");
-        $result = $this->CostumerModel->getAllCostumers();
+        $result = $this->CostumerModel->getAllCostumersForDropDown();
         $this->data['select'] = array();
         foreach($result as $r){
             $this->data['select'][$r->id] = $r->name;
@@ -138,7 +138,7 @@ class Cashpoint extends CI_Controller{
         $costumerId = $this->input->post("costumer");
         $employeeId = $this->EmployeeModel->getEmployeeByName($this->session->username);
         if($costumerId !== 0) {
-            $this->OrderModel->addOrder($this->itemList, $employeeId, $costumerId);
+            $this->OrderModel->addOrder($this->itemList, $costumerId, $employeeId);
             $this->sendShoppingCart();
         }
         else{

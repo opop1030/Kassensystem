@@ -56,6 +56,15 @@ class CostumerModel extends CI_Model{
         return $q->result_array();
     }
 
+    public function getAllCostumersForDropDown(){
+        $q = $this
+            ->db
+            ->select("kunde.id, person.name, person.vname")
+            ->join("person", "person.id = kunde.fi_person")
+            ->get("kunde");
+        return $q->result();
+    }
+
     public function getCostumerByName($name){
         $q = $this
             ->db

@@ -10,6 +10,7 @@ if($status["shownavi"] === true)
         echo '<li class="menupoint">' . anchor('datahandler/show_lager', 'Lager') . '</li>';
         if($status["login"][2] > 0 && $status["login"][2] <= 2) {
             echo '<li class="menupoint">' . anchor('datahandler/show_kunden', 'Kunden Verwalten') . '</li>';
+            echo '<li class="menupoint">' . anchor('datahandler/show_bestellungen', 'Bestellungen Verwalten') . '</li>';
             if ($status["login"][2] == 2) {
                 echo '<li class="menupoint">' . anchor('datahandler/show_mitarbeiter', 'Mitarbeiter Verwalten') . '</li>';
             }

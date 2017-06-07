@@ -21,13 +21,15 @@ class Datahandler extends CI_Controller{
     {
         $userdata = $this->getLoginData();
         $this->data['title'] = "Kassensystem Emma - ".$titleaddon;
+        $this->data['header'] = $titleaddon;
         $this->data['content'] = $view;
-        $this->data['tableheader'] = $tableheader;
+        $this->table->set_heading($tableheader);
         $this->data['tabledata'] = $this->table->generate($tabledata);
         $this->data['status'] = array(
             'shownavi' => true,
             'login' => $userdata
         );
+        $this->data['special'] = null; //aufgrund von strukturfehler noch notwendig
         $this->load->view('includes/content.php', $this->data);
     }
 
@@ -46,28 +48,42 @@ class Datahandler extends CI_Controller{
 
 	public function show_bestellungen()
 	{
-        $this->setPageData("Bestellungs&uuml;bersicht", "content/");
+        $tableheader = array();
+        $tabledata = null;
+        $this->setPageData("Bestellungs&uuml;bersicht", "content/DataListing_View.php", $tableheader, $tabledata);
 	}
 
 	public function show_lager()
 	{
-        $this->setPageData("Lager&uuml;bersicht", "lager");
+        $tableheader = array();
+        $tabledata = null;
+        $this->setPageData("Lager&uuml;bersicht", "content/DataListing_View.php", $tableheader, $tabledata);
 	}
 
 	public function show_kunden()
-	{
+    {
         $temp = $this->session->code;
-        if(!$temp > 0 && !$temp <= 2){
+        if (!$temp > 0 && !$temp <= 2) {
             redirect('home');
         }
-        $this->setPageData("Kunden&uuml;bersicht", "kunden");
-	}
+        else
+        {
+            $tableheader = array();
+            $tabledata = null;
+            $this->setPageData("Kunden&uuml;bersicht", "content/DataListing_View.php", $tableheader, $tabledata);
+        }
+    }
 
 	public function show_mitarbeiter()
 	{
         if($this->session->code != 2){
             redirect('home');
         }
-		$this->setPageData("Mitarbeiter&uuml;bersicht", "mitarbeiter");
+        else
+        {
+            $tableheader = array();
+            $tabledata = null;
+            $this->setPageData("Mitarbeiter&uuml;bersicht", "content/DataListing_View.php", $tableheader, $tabledata);
+        }
 	}
 }

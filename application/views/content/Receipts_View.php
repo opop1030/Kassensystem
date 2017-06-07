@@ -12,6 +12,6 @@
         echo $special["price"] - $special["money"];
         echo "Rückgeld";
 
-        echo "Einkauf abgeschlossen!<br/>".anchor("Cashpoint/clearCashpoint");
+        echo "Einkauf abgeschlossen!<br/>".anchor("Cashpoint/clearCashpoint",'Verstanden!', 'class="btn btn-default"');
     ?>
 </div>

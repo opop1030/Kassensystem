@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 //Cashpoint bedeutet auf Englisch Kasse, daher der Name :)
 class Cashpoint extends CI_Controller{
 
-    private $data, $itemList, $costumers;
+    private $data, $itemList;
 
 	private function getLoginData(){
 		$userdata = null;
@@ -20,14 +20,6 @@ class Cashpoint extends CI_Controller{
 
     private function refreshList()
     {
-        if(!isset($_SESSION['costumers'])){
-            $this->load->model("CostumerModel");
-            $this->costumers = $this->CostumerModel->getAllCostumers();
-            $this->session->set_userdata('costumers', $this->costumers);
-        }
-        else{
-            $this->costumers = $this->session->userdata("costumers");
-        }
         if(isset($_SESSION['datalist']))
         {
             $this->itemList = $this->session->userdata("datalist");
@@ -57,7 +49,7 @@ class Cashpoint extends CI_Controller{
 			'shownavi' => true,
             'login' => $userdata
 		);
-		$this->data['special'] = array("itemlist"=>$this->itemList,"costumers"=>$this->costumers);
+		$this->data['special'] = array("itemlist"=>$this->itemList);
 		$this->load->view('includes/content.php', $this->data);
 	}
 
@@ -129,7 +121,13 @@ class Cashpoint extends CI_Controller{
             'shownavi' => true,
             'login' => $userdata
         );
-        $this->data['special'] = array("itemlist"=>$this->itemList,"costumers"=>$this->costumers);
+        $this->load->model("CostumerModel");
+        $result = $this->CostumerModel->getAllCostumers();
+        $this->data['select'] = array();
+        foreach($result as $r){
+            $this->data['select'][$r->id] = $r->name;
+        }
+        $this->data['special'] = array("itemlist"=>$this->itemList);
         $this->load->view('includes/content.php', $this->data);
     }
 
@@ -137,10 +135,10 @@ class Cashpoint extends CI_Controller{
     {
         $this->load->model("OrderModel");
         $this->load->model("EmployeeModel");
-        $employeeId = $this->input->post("costumer");
-        $userId = $this->EmployeeModel->getEmployeeByName($this->session->username);
-        if($this->input->post('costumer') !== 0) {
-            $this->OrderModel->addOrder($this->itemList, $userId, $employeeId);
+        $costumerId = $this->input->post("costumer");
+        $employeeId = $this->EmployeeModel->getEmployeeByName($this->session->username);
+        if($costumerId !== 0) {
+            $this->OrderModel->addOrder($this->itemList, $employeeId, $costumerId);
             $this->sendShoppingCart();
         }
         else{

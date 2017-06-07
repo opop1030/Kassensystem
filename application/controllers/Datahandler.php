@@ -17,16 +17,23 @@ class Datahandler extends CI_Controller{
         return $userdata;
     }
 
-    private function setPageData($titlesufix, $methodInfo = null, $table = "")
+    private function setPageData($titleaddon, $view, $tableheader, $tabledata)
     {
         $userdata = $this->getLoginData();
-        $this->data['title'] = "Kassensystem Emma - ".$titlesufix;
-        $this->data['content'] = "content/Datahandler_View.php";
+        $this->data['title'] = "Kassensystem Emma - ".$titleaddon;
+        $this->data['header'] = $titleaddon;
+        $this->data['content'] = $view;
+        $template = array(
+            'table_open' => '<table class="table table-bordered table-hover">'
+        );
+        $this->table->set_template($template);
+        $this->table->set_heading($tableheader);
+        $this->data['tabledata'] = $this->table->generate($tabledata);
         $this->data['status'] = array(
             'shownavi' => true,
             'login' => $userdata
         );
-        $this->data['special'] = array("method" => $methodInfo, "table"=>$table);
+        $this->data['special'] = null; //aufgrund von strukturfehler noch notwendig
         $this->load->view('includes/content.php', $this->data);
     }
 
@@ -40,33 +47,48 @@ class Datahandler extends CI_Controller{
 
 	public function index()
 	{
-		$this->setPageData("Anzeige");
+		redirect('home');
 	}
 
 	public function show_bestellungen()
 	{
-        $this->setPageData("Bestellungs&uuml;bersicht", "bestellungen");
+        $this->load->model("OrderModel");
+        $result = $this->OrderModel->getAllOrders();
+        $tableheader=array('Kundenname', 'Kundenvorname', 'Bestelldatum');
+        foreach($result as $entry){
+            $this->table->add_row(array($entry["name"], $entry["vname"], $entry["datum"], anchor("Datahandler/show_bestellungenDetail/".$entry["id"],'Details','class="btn btn-default"')));
+        }
+        $this->setPageData("Bestellungs&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
 	}
 
 	public function show_lager()
 	{
-        $this->setPageData("Lager&uuml;bersicht", "lager");
+        $tableheader=array();
+        $this->setPageData("Lager&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
 	}
 
 	public function show_kunden()
-	{
+    {
         $temp = $this->session->code;
-        if(!$temp > 0 && !$temp <= 2){
+        if (!$temp > 0 && !$temp <= 2) {
             redirect('home');
         }
-        $this->setPageData("Kunden&uuml;bersicht", "kunden");
-	}
+        else
+        {
+            $tableheader=array();
+            $this->setPageData("Kunden&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
+        }
+    }
 
 	public function show_mitarbeiter()
 	{
         if($this->session->code != 2){
             redirect('home');
         }
-		$this->setPageData("Mitarbeiter&uuml;bersicht", "mitarbeiter");
+        else
+        {
+            $tableheader=array();
+            $this->setPageData("Mitarbeiter&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
+        }
 	}
 }

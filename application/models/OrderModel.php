@@ -45,7 +45,12 @@ class OrderModel extends CI_Model{
     }
 
     public function getAllOrders(){
-        $q = $this->db->get("bestellung");
+        $q = $this
+            ->db
+            ->select("person.name, person.vname, bestellung.datum, bestellung.id")
+            ->join("kunde", "kunde.id = bestellung.fi_kunde")
+            ->join("person", "kunde.fi_person = person.id")
+            ->get("bestellung");
         return $q->result_array();
     }
 }

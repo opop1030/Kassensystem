@@ -23,6 +23,10 @@ class Datahandler extends CI_Controller{
         $this->data['title'] = "Kassensystem Emma - ".$titleaddon;
         $this->data['header'] = $titleaddon;
         $this->data['content'] = $view;
+        $template = array(
+            'table_open' => '<table class="table table-bordered table-hover">'
+        );
+        $this->table->set_template($template);
         $this->table->set_heading($tableheader);
         $this->data['tabledata'] = $this->table->generate($tabledata);
         $this->data['status'] = array(
@@ -48,16 +52,20 @@ class Datahandler extends CI_Controller{
 
 	public function show_bestellungen()
 	{
-        $tableheader = array();
-        $tabledata = null;
-        $this->setPageData("Bestellungs&uuml;bersicht", "content/DataListing_View.php", $tableheader, $tabledata);
+        $this->load->model("OrderModel");
+        $result = $this->OrderModel->getAllOrders();
+        $tableheader=array('Kundenname', 'Kundenvorname', 'Bestelldatum');
+        foreach($result as $entry){
+            $this->table->add_row(array($entry["name"], $entry["vname"], $entry["datum"], anchor("Datahandler/show_bestellungenDetail/".$entry["id"],'Details','class="btn btn-default"')));
+        }
+        $this->setPageData("Bestellungs&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
 	}
 
 	public function show_lager()
 	{
-        $tableheader = array();
+        $tableheader=array();
         $tabledata = null;
-        $this->setPageData("Lager&uuml;bersicht", "content/DataListing_View.php", $tableheader, $tabledata);
+        $this->setPageData("Lager&uuml;bersicht", "content/DataListing_View.php", $tabledata);
 	}
 
 	public function show_kunden()
@@ -68,9 +76,9 @@ class Datahandler extends CI_Controller{
         }
         else
         {
-            $tableheader = array();
+            $tableheader=array();
             $tabledata = null;
-            $this->setPageData("Kunden&uuml;bersicht", "content/DataListing_View.php", $tableheader, $tabledata);
+            $this->setPageData("Kunden&uuml;bersicht", "content/DataListing_View.php", $tabledata);
         }
     }
 
@@ -81,9 +89,8 @@ class Datahandler extends CI_Controller{
         }
         else
         {
-            $tableheader = array();
             $tabledata = null;
-            $this->setPageData("Mitarbeiter&uuml;bersicht", "content/DataListing_View.php", $tableheader, $tabledata);
+            $this->setPageData("Mitarbeiter&uuml;bersicht", "content/DataListing_View.php", $tabledata);
         }
 	}
 }

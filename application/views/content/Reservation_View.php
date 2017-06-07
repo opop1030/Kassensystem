@@ -15,14 +15,18 @@
             $price += $item["cost"] * $item["amount"];
         }
     }
+    $template = array(
+        'table_open' => '<table class="table table-bordered table-hover">'
+    );
+    $this->table->set_template($template);
     echo $this->table->generate();
     echo '<br/>';
     echo '<br/>';
     echo '<p>Gesammtbetrag: '.$price.'&euro;</p>';
     echo '<br/>';
-    echo form_submit('submit','Abschicken');
+    echo form_submit('submit','Abschicken','class="btn btn-default"');
     echo '&nbsp;&nbsp;&nbsp;';
-    echo anchor('Cashpoint','Abbrechen');
+    echo anchor('Cashpoint','Abbrechen', 'class="btn btn-default"');
     echo form_close();
     ?>
 </div>

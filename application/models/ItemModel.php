@@ -52,4 +52,9 @@ class ItemModel extends CI_Model{
         $newAmount = $currendAmount + $difference;
         $this->db->where("artikelnr", $id)->set("bestand", $newAmount)->update("artikel");
     }
+
+    public function getAllItems(){
+        $q = $this->db->get("artikel");
+        return $q->result_array();
+    }
 }

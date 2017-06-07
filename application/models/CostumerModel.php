@@ -46,9 +46,13 @@ class CostumerModel extends CI_Model{
         $q = $this
             ->db
             ->select("kunde.id, person.name, person.vname")
-            ->join("person", "person.id = kunde.id")
+            ->join("person", "person.id = kunde.fi_person")
             ->get("kunde");
-        return $q->result();
+        $costumerlist = array(array("name"=>"Kein Kunde", "id"=>0));
+        foreach($q->result() as $costumer){
+            array_push($costumerlist, array("name"=>$costumer->name.", ".$costumer->vname,"id"=>$costumer->id));
+        }
+        return $costumerlist;
     }
 
     public function getCostumerByName($name){

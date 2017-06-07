@@ -45,6 +45,7 @@ class OrderModel extends CI_Model{
     }
 
     public function getAllOrders(){
-
+        $q = $this->db->get("bestellung");
+        return $q->result_array();
     }
 }

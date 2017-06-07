@@ -24,12 +24,10 @@
     echo '<br/>';
     echo '<p>Gesammtbetrag: '.$price.'&euro;</p>';
     echo '<br/>';
-    echo form_label('Vorbestellung?', 'isPreorder');
-    echo form_dropdown('costumer', $special["costumers"]);
-    echo form_checkbox('isPreorder', 'preorder', false);
-    echo '<br/>';
     echo '<br/>';
     echo anchor('Cashpoint/sendShoppingCart', 'Eintrag abschicken');
+    echo '&nbsp;&nbsp;&nbsp;';
+    echo anchor("Cashpoint/showReservation", 'Als Vorbestellung Speichern...');
     echo '<br/>';
     echo form_close();
     ?>

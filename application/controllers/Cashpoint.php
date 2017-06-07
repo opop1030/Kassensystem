@@ -20,7 +20,7 @@ class Cashpoint extends CI_Controller{
 
     private function refreshList()
     {
-        if(isset($_SESSION['costumers'])){
+        if(!isset($_SESSION['costumers'])){
             $this->load->model("CostumerModel");
             $this->costumers = $this->CostumerModel->getAllCostumers();
             $this->session->set_userdata('costumers', $this->costumers);
@@ -112,19 +112,46 @@ class Cashpoint extends CI_Controller{
     //"Button" zum abschliessen einer Bestellung
 	public function sendShoppingCart()
     {
-        if($this->input->post('isPreorder') === true)
-        {
-            $this->load->model("OrderModel");
-            $this->load->model("EmployeeModel");
-            $employeeId = $this->EmployeeModel->getEmployeeByName($this->session->username);
-            $userId = $this->getLoginData()["code"];
-            $this->OrderModel->addOrder($this->itemList, $userId, $employeeId);
+        if(Count($this->itemList) > 0) {
+            $this->load->model("ItemModel");
+            foreach ($this->itemList as $item) {
+                $this->ItemModel->setCurrendAmountById($item["id"], $item["amount"] * -1);
+            }
         }
-        $this->load->model("ItemModel");
-        foreach($this->itemList as $item){
-            $this->ItemModel->setCurrendAmountById($item["id"], $item["amount"]*-1);
-        }
-        $this->session->unset_userdata('datalist');
-        redirect('Cashpoint');
+        $this->clearCart();
 	}
+
+    public function showReservation(){
+        $userdata = $this->getLoginData();
+        $this->data['title'] = "Kassensystem Emma - Reservation";
+        $this->data['content'] = "content/Reservation_View.php";
+        $this->data['status'] = array(
+            'shownavi' => true,
+            'login' => $userdata
+        );
+        $this->data['special'] = array("itemlist"=>$this->itemList,"costumers"=>$this->costumers);
+        $this->load->view('includes/content.php', $this->data);
+    }
+
+    public function reserveOrder()
+    {
+        $this->load->model("OrderModel");
+        $this->load->model("EmployeeModel");
+        $employeeId = $this->input->post("costumer");
+        $userId = $this->EmployeeModel->getEmployeeByName($this->session->username);
+        if($this->input->post('costumer') !== 0) {
+            $this->OrderModel->addOrder($this->itemList, $userId, $employeeId);
+            $this->sendShoppingCart();
+        }
+        else{
+            $this->reserveOrder();
+        }
+    }
+
+    private function clearCart()
+    {
+        $this->session->unset_userdata('datalist');
+        $this->session->unset_userdata('costumers');
+        redirect('Cashpoint');
+    }
 }

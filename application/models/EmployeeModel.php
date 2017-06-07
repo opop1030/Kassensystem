@@ -23,7 +23,7 @@ class EmployeeModel extends CI_Model{
         }
     }
 
-    public function  getEmployeeByName($name)
+    public function getEmployeeByName($name)
     {
         $q = $this
             ->db

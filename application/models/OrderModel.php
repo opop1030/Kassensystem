@@ -54,6 +54,17 @@ class OrderModel extends CI_Model{
         return $q->result_array();
     }
 
+    //wird für cancel und abschliessen einer Order genutzt
+    public function deleteOrder($id)
+    {
+
+    }
+
+    public function addItemToOrder($idOrder, $idArticle)
+    {
+
+    }
+
     public function getOrderDetails($id)
     {
 

@@ -20,12 +20,17 @@ class ItemModel extends CI_Model{
         }
     }
 
-    public function addItem($id, $name, $kategorie, $price, $amount){
-        $this->db->insert("artikel", array("artikelnr"=>$id, "name"=>$name, "fi_kategorie"=>$kategorie, "bestand"=>$amount, "preis"=>$price));
+    public function addItem($id, $name, $price, $amount){
+        $this->db->insert("artikel", array("artikelnr"=>$id, "name"=>$name, "bestand"=>$amount, "preis"=>$price));
     }
 
     public function deleteItem($id){
         $this->db->delete("artikel", "artikelnr = ".$id);
+    }
+
+    public function editItem($id, $name, $price, $amount)
+    {
+        $this->db->where("artikelnr", $id)->update("artikel", array("name"=>$name, "bestand"=>$amount, "preis"=>$price));
     }
 
     public function isItemAvailable($id){

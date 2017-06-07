@@ -61,11 +61,52 @@ class Datahandler extends CI_Controller{
         $this->setPageData("Bestellungs&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
 	}
 
+    public function show_bestellungenDetail($id){
+        if(!isset($id)){
+            redirect('Datahandler/show_bestellungen');
+        }
+        else{
+            $this->load->model("OrderModel");
+            $result = $this->OrderModel->getOrderDetails($id);
+            $tableheader=array('Artikelnr', 'Bezeichnung', 'Menge', 'Einzelpreis');
+            foreach($result as $entry){
+                $this->table->add_row(array());
+            }
+            $this->setPageData("Detail&uuml;bersicht Bestellung Nr. ".$id, "content/DataListing_View.php", $tableheader, $this->table);
+        }
+    }
+
 	public function show_lager()
 	{
-        $tableheader=array();
+        $this->load->model("ItemModel");
+        $tableheader=array('Artikelnr', 'Bezeichnung', 'Menge', 'Einzelpreis');
+        $result = $this->ItemModel->getAllItems();
+        foreach($result as $entry){
+            $deleteUrl = anchor('Datahandler/deleteItem/'.$entry["artikelnr"],'L&ouml;schen', 'class="btn btn-default"');
+            $editUrl = anchor('Datahandler/editItem/'.$entry["artikelnr"], 'Editieren', 'class="btn btn-default"');
+            $this->table->add_row(array($entry["artikelnr"], $entry["name"], $entry["bestand"], $entry["preis"], $editUrl, $deleteUrl));
+        }
+        $this->table->add_row(anchor('Datahandler/addItem','Hinzuf&uuml;gen', 'class="btn btn-default"'));
         $this->setPageData("Lager&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
 	}
+
+    public function refillItem()
+    {
+        if(!empty($this->input->post("scan")))
+        {
+
+        }
+    }
+
+    public function editItem($id)
+    {
+
+    }
+
+    public function deleteItem($id)
+    {
+
+    }
 
 	public function show_kunden()
     {

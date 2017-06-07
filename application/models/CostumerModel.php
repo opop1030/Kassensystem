@@ -42,6 +42,11 @@ class CostumerModel extends CI_Model{
         }
     }
 
+    public function editCostumer($id, $dataArray)
+    {
+
+    }
+
     public function getAllCostumers(){
         $q = $this
             ->db

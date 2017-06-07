@@ -81,8 +81,7 @@
 	 *  @property EmployeeModel		$EmployeeModel		Model for employeedata handling
 	 *	@property OrderModel		$OrderModel			Model for orderdata handling
 	 *  @property CostumerModel		$CostumerModel		Model for costumerdata handling
-	 * 	@StorageModel				$StorageModel		Model for storagedata handling
-	 * 	@ItemModel					$ItemModel			Model for article handling
+	 * 	@property ItemModel		$ItemModel			Model for article handling
 	 */
 	class CI_Controller {
 		public function __construct() {

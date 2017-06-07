@@ -53,4 +53,9 @@ class OrderModel extends CI_Model{
             ->get("bestellung");
         return $q->result_array();
     }
+
+    public function getOrderDetails($id)
+    {
+
+    }
 }

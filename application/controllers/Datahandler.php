@@ -64,8 +64,7 @@ class Datahandler extends CI_Controller{
 	public function show_lager()
 	{
         $tableheader=array();
-        $tabledata = null;
-        $this->setPageData("Lager&uuml;bersicht", "content/DataListing_View.php", $tabledata);
+        $this->setPageData("Lager&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
 	}
 
 	public function show_kunden()
@@ -77,8 +76,7 @@ class Datahandler extends CI_Controller{
         else
         {
             $tableheader=array();
-            $tabledata = null;
-            $this->setPageData("Kunden&uuml;bersicht", "content/DataListing_View.php", $tabledata);
+            $this->setPageData("Kunden&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
         }
     }
 
@@ -89,8 +87,8 @@ class Datahandler extends CI_Controller{
         }
         else
         {
-            $tabledata = null;
-            $this->setPageData("Mitarbeiter&uuml;bersicht", "content/DataListing_View.php", $tabledata);
+            $tableheader=array();
+            $this->setPageData("Mitarbeiter&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
         }
 	}
 }

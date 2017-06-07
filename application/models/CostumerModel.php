@@ -50,10 +50,10 @@ class CostumerModel extends CI_Model{
     public function getAllCostumers(){
         $q = $this
             ->db
-            ->select("kunde.id, person.name, person.vname")
+            ->select("kunde.id, person.name, person.vname, person.strasse, person.hausnr, person.plz, person.ort")
             ->join("person", "person.id = kunde.fi_person")
             ->get("kunde");
-        return $q->result();
+        return $q->result_array();
     }
 
     public function getCostumerByName($name){

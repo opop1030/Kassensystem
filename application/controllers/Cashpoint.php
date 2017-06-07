@@ -78,7 +78,7 @@ class Cashpoint extends CI_Controller{
             $item = $this->ItemModel->getItemData($this->input->post("scan"));
             if (isset($item))
             {
-                if($this->ItemModel->isItemAvailable()===true) {
+                if($this->ItemModel->isItemAvailable($item->artikelnr) === true) {
                     $result = array(
                         "id" => $item->artikelnr,
                         "name" => $item->name,

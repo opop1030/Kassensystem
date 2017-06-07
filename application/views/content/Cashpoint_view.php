@@ -11,7 +11,7 @@
     $price = 0;
     $itemCount = count($special["itemlist"]);
     if($itemCount !== 0) {
-        foreach ($special as $item) {
+        foreach ($special["itemlist"] as $item) {
             $this->table->add_row($item["name"], $item["cost"], $item["amount"], anchor('Cashpoint/removeItem/' . $item["id"], 'L&ouml;schen'));
             $price += $item["cost"] * $item["amount"];
         }

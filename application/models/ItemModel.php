@@ -41,15 +41,15 @@ class ItemModel extends CI_Model{
     public function getCurrendAmountById($id){
         $currendAmount = $this
             ->db
-            ->select("menge")
+            ->select("bestand")
             ->where("artikelnr", $id)
-            ->get("artikel")->row(0);
+            ->get("artikel")->row(0)->bestand;
         return $currendAmount;
     }
 
     public function setCurrendAmountById($id, $difference){
         $currendAmount = $this->getCurrendAmountById($id);
-        $newAmount = $currendAmount - $difference;
-        $this->db->where("artikelnr", $id)->set("menge", $newAmount)->update("artikel");
+        $newAmount = $currendAmount + $difference;
+        $this->db->where("artikelnr", $id)->set("bestand", $newAmount)->update("artikel");
     }
 }

@@ -69,4 +69,9 @@ class EmployeeModel extends CI_Model{
             return false;
         }
     }
+
+    public function edit($employeeId, $name, $gehalt)
+    {
+        //passwort evtl über andere funktion
+    }
 }

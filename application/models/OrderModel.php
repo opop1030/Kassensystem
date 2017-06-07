@@ -13,6 +13,17 @@ class OrderModel extends CI_Model{
         return $q->last_row()->id;
     }
 
+    private function checkItemExists($idItem, $idOrder)
+    {
+        $q = $this->db->where("id_fi_bestellung",$idOrder)->where("id_fi_artikel", $idItem)->get("bestellpositionen");
+        if($q->row(0) !== null){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
     public function addOrder($itemList, $idCostumer, $idEmployee){
         $qOrder = $this
             ->db
@@ -57,16 +68,36 @@ class OrderModel extends CI_Model{
     //wird für cancel und abschliessen einer Order genutzt
     public function deleteOrder($id)
     {
-
+        $this->db->where("id_fi_bestellung", $id)->delete("bestellpositionen");
+        $this->db->where("id", $id)->delete("bestellung");
     }
 
-    public function addItemToOrder($idOrder, $idArticle)
+    public function addItemToOrder($idOrder, $idArticle, $amount)
     {
+        if($this->checkItemExists($idArticle, $idOrder) === true)
+        {
+            $this->db->where("id_fi_artikel", $idArticle)->where("id_fi_bestellung", $idOrder)->set("menge", $amount)->update("bestellpositionen");
+        }
+        else
+        {
+            $this->db->set("id_fi_bestellung", $idOrder)->set("id_fi_artikel",$idArticle)->set("menge", $amount)->insert("bestellpositionen");
+        }
+    }
 
+    public function deleteItemFromOrder($idOrder, $idItem)
+    {
+        $this->db->where("id_fi_artikel", $idItem)->where("id_fi_bestellung", $idOrder)->delete("bestellpositionen");
     }
 
     public function getOrderDetails($id)
     {
-
+        $q = $this
+            ->db
+            ->select("artikel.artikelnr, artikel.name, artikel.preis, bestellpositionen.menge")
+            ->join("bestellung", "bestellpositionen.id_fi_bestellung = bestellung.id")
+            ->join("artikel", "bestellpositionen.id_fi_artikel = artikel.artikelnr")
+            ->where("bestellung.id", $id)
+            ->get("bestellpositionen");
+        return $q->result_array();
     }
 }

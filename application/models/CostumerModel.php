@@ -42,9 +42,21 @@ class CostumerModel extends CI_Model{
         }
     }
 
-    public function editCostumer($id, $dataArray)
+    public function editCostumer($id, $name, $vname, $strasse, $hausnr, $plz, $ort, $tel, $email)
     {
-
+        $this->
+        db->
+        where("kunde.id", $id)->
+        join("kunde","person.id = kunde.fi_person")->
+        set("name",$name)->
+        set("vname",$vname)->
+        set("strasse",$strasse)->
+        set("hausnr",$hausnr)->
+        set("plz",$plz)->
+        set("ort",$ort)->
+        set("tel",$tel)->
+        set("email",$email)->
+        update("person");
     }
 
     public function getAllCostumers(){

@@ -116,9 +116,29 @@ class Datahandler extends CI_Controller{
         }
         else
         {
-            $tableheader=array();
+            $this->load->model("CostumerModel");
+            $result = $this->CostumerModel->getAllCostumers();
+            foreach($result as $entry){
+                $editUri = anchor("Datahandler/editCostumer/".$entry["fi_person"], "Editieren", "class='btn btn-default'");
+                $deleteUri = anchor("Datahandler/deleteCostumer/".$entry["fi_person"], "L&ouml;schen", "class='btn btn-default'");
+                $this->table->add_row(array($entry["name"], $entry["vname"], $entry["strasse"], $entry["hausnr"], $entry["plz"], $entry["ort"], $editUri, $deleteUri));
+            }
+            $this->table->add_row(anchor("Datahandler/addCostumer", "Hinzuf&uuml;gen", "class='btn btn-default'"));
+            $tableheader=array("Name", "Vorname", "Strasse", "Hausnummer", "PLZ", "Ort");
             $this->setPageData("Kunden&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
         }
+    }
+
+    public function addCostumer(){
+
+    }
+
+    public function deleteCostumer($id){
+
+    }
+
+    public function editCostumer($id){
+
     }
 
 	public function show_mitarbeiter()

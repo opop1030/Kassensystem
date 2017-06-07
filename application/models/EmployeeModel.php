@@ -36,6 +36,11 @@ class EmployeeModel extends CI_Model{
         return $q->result_array()[0]["id"];
     }
 
+    public function getAllEmployees(){
+        $q = $this->db->select("person.name, person.vname, angestellte.fi_person, angestellte.gehalt")->join("person","person.id = angestellte.fi_person")->get("angestellte");
+        return $q->result_array();
+    }
+
     public function create($name, $pwd)
     {
         //hier wird ein neuer angestellter eingefügt, allerdings ohne brechtigungen und ohne gehalt
@@ -50,6 +55,7 @@ class EmployeeModel extends CI_Model{
         $select_q = $this
             ->db
             ->where("id", $employeeId)
+            ->where_not_in("rechte", 2)
             ->get("angestellte");
         if($select_q->result() != null){
             $personId = $select_q->row(0)->fi_person;

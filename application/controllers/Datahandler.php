@@ -62,17 +62,23 @@ class Datahandler extends CI_Controller{
 	}
 
     public function show_bestellungenDetail($id){
-        if(!isset($id)){
-            redirect('Datahandler/show_bestellungen');
+        $temp = $this->session->code;
+        if (!$temp > 0 && !$temp <= 2) {
+            redirect("Datahandler/show_bestellungen");
         }
-        else{
-            $this->load->model("OrderModel");
-            $result = $this->OrderModel->getOrderDetails($id);
-            $tableheader=array('Artikelnr', 'Bezeichnung', 'Menge', 'Einzelpreis');
-            foreach($result as $entry){
-                $this->table->add_row(array());
+        else
+        {
+            if (!isset($id)) {
+                redirect('Datahandler/show_bestellungen');
+            } else {
+                $this->load->model("OrderModel");
+                $result = $this->OrderModel->getOrderDetails($id);
+                $tableheader = array('Artikelnr', 'Bezeichnung', 'Menge', 'Einzelpreis');
+                foreach ($result as $entry) {
+                    $this->table->add_row(array());
+                }
+                $this->setPageData("Detail&uuml;bersicht Bestellung Nr. " . $id, "content/DataListing_View.php", $tableheader, $this->table);
             }
-            $this->setPageData("Detail&uuml;bersicht Bestellung Nr. ".$id, "content/DataListing_View.php", $tableheader, $this->table);
         }
     }
 
@@ -92,20 +98,44 @@ class Datahandler extends CI_Controller{
 
     public function refillItem()
     {
-        if(!empty($this->input->post("scan")))
+        $temp = $this->session->code;
+        if (!$temp > 0 && !$temp <= 2)
         {
+            redirect("Datahandler/show_lager");
+        }
+        else
+        {
+            if(!empty($this->input->post("scan")))
+            {
 
+            }
         }
     }
 
     public function editItem($id)
     {
+        $temp = $this->session->code;
+        if (!$temp > 0 && !$temp <= 2)
+        {
+            redirect("Datahandler/show_lager");
+        }
+        else
+        {
 
+        }
     }
 
     public function deleteItem($id)
     {
+        $temp = $this->session->code;
+        if (!$temp > 0 && !$temp <= 2)
+        {
+            redirect("Datahandler/show_lager");
+        }
+        else
+        {
 
+        }
     }
 
 	public function show_kunden()
@@ -130,26 +160,94 @@ class Datahandler extends CI_Controller{
     }
 
     public function addCostumer(){
+        $temp = $this->session->code;
+        if (!$temp > 0 && !$temp <= 2)
+        {
+            redirect('Datahandler/show_kunden');
+        }
+        else
+        {
 
+        }
     }
 
     public function deleteCostumer($id){
+        if ($this->session->code !== 2)
+        {
+            redirect('Datahandler/show_kunden');
+        }
+        else
+        {
 
+        }
     }
 
     public function editCostumer($id){
+        if ($this->session->code !== 2)
+        {
+            redirect('Datahandler/show_kunden');
+        }
+        else
+        {
 
+        }
     }
 
 	public function show_mitarbeiter()
 	{
-        if($this->session->code != 2){
+        if($this->session->code != 2)
+        {
             redirect('home');
         }
         else
         {
-            $tableheader=array();
+
+            $this->load->model("EmployeeModel");
+            $result = $this->EmployeeModel->getAllEmployees();
+            foreach($result as $entry){
+                $editUri = anchor("Datahandler/editEmployee/".$entry["fi_person"], "Editieren", "class='btn btn-default'");
+                $deleteUri = anchor("Datahandler/deleteEmployee/".$entry["fi_person"], "L&ouml;schen", "class='btn btn-default'");
+                $this->table->add_row(array($entry["name"], $entry["vname"], $entry["gehalt"], $editUri, $deleteUri));
+            }
+            $this->table->add_row(anchor("Datahandler/addEmployee", "Hinzuf&uuml;gen", "class='btn btn-default'"));
+            $tableheader=array("Name", "Vorname", "Gehalt");
             $this->setPageData("Mitarbeiter&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
         }
 	}
+
+    public function editEmployee($id)
+    {
+        if($this->session->code != 2)
+        {
+            redirect('Datahandler/show_mitarbeiter');
+        }
+        else
+        {
+
+        }
+    }
+
+    public function deleteEmployee($id)
+    {
+        if($this->session->code != 2)
+        {
+            redirect('Datahandler/show_mitarbeiter');
+        }
+        else
+        {
+
+        }
+    }
+
+    public function addEmployee()
+    {
+        if($this->session->code != 2)
+        {
+            redirect('Datahandler/show_mitarbeiter');
+        }
+        else
+        {
+
+        }
+    }
 }

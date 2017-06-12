@@ -17,7 +17,7 @@ class Datahandler extends CI_Controller{
         return $userdata;
     }
 
-    private function setPageData($titleaddon, $view, $tableheader, $tabledata)
+    private function setPageData($titleaddon, $view, $tableheader, $tabledata, $datazusatz="")
     {
         $userdata = $this->getLoginData();
         $this->data['title'] = "Kassensystem Emma - ".$titleaddon;
@@ -33,7 +33,7 @@ class Datahandler extends CI_Controller{
             'shownavi' => true,
             'login' => $userdata
         );
-        $this->data['special'] = null; //aufgrund von strukturfehler noch notwendig
+        $this->data['special'] = $datazusatz;
         $this->load->view('includes/content.php', $this->data);
     }
 
@@ -56,7 +56,7 @@ class Datahandler extends CI_Controller{
         $result = $this->OrderModel->getAllOrders();
         $tableheader=array('Kundenname', 'Kundenvorname', 'Bestelldatum');
         foreach($result as $entry){
-            $this->table->add_row(array($entry["name"], $entry["vname"], $entry["datum"], anchor("Datahandler/show_bestellungenDetail/".$entry["id"],'Details','class="btn btn-default"')));
+            $this->table->add_row(array($entry["name"], $entry["vname"], $entry["datum"], anchor("Datahandler/show_bestellungenDetail/".$entry["id"],'Details','class="btn btn-default"'), anchor("Datahandler/finishOrder/".$entry["id"], "Bestellung Abschliessen!", "class='btn btn-default'")));
         }
         $this->setPageData("Bestellungs&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
 	}
@@ -74,12 +74,25 @@ class Datahandler extends CI_Controller{
                 $this->load->model("OrderModel");
                 $result = $this->OrderModel->getOrderDetails($id);
                 $tableheader = array('Artikelnr', 'Bezeichnung', 'Menge', 'Einzelpreis');
+                $price = 0;
                 foreach ($result as $entry) {
-                    $this->table->add_row(array());
+                    $this->table->add_row(array($entry["artikelnr"], $entry["name"], $entry{"menge"}, $entry["preis"]));
+                    $price += $entry["menge"] * $entry["preis"];
                 }
-                $this->setPageData("Detail&uuml;bersicht Bestellung Nr. " . $id, "content/DataListing_View.php", $tableheader, $this->table);
+                $this->table->add_row(array(anchor("Datahandler/addOrderItem/".$id,"Artikel hinzuf&uuml;gen","class='btn btn-default'"), anchor("Datahandler/finishOrder/".$id, "Bestellung Abschliessen!","class='btn btn-default'")));
+                $pricetext = "Gesammtpreis : ".$price;
+                $this->setPageData("Detail&uuml;bersicht Bestellung Nr. " . $id, "content/DataListing_View.php", $tableheader, $this->table, $pricetext);
             }
         }
+    }
+
+    public function addOrderItem($id)
+    {
+
+    }
+
+    public function finsihOrder($id){
+
     }
 
 	public function show_lager()

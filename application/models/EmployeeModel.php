@@ -41,13 +41,11 @@ class EmployeeModel extends CI_Model{
         return $q->result_array();
     }
 
-    public function create($name, $pwd)
+    public function create($name, $vname, $pwd)
     {
-        //hier wird ein neuer angestellter eingefügt, allerdings ohne brechtigungen und ohne gehalt
-        //weitere infos werden auch fürs erste nicht nötig sein
-        //Schritt 1 person erzeugen
-        //Schritt 2 ID raussuchen
-        //Schritt 3 Mitarbeiter schreiben, mit berechtigung 0
+        $this->db->set("name", $name)->set("vname", $vname)->insert("person");
+        $lastperson = $this->db->select("id")->where("name", $name)->where("vname", $vname)->get("person")->last_row()->id;
+        $this->db->set("fi_person",$lastperson)->set("rechte", 0)->set("passwort",sha1($pwd))->insert("angestellte");
     }
 
     public function delete($employeeId)
@@ -70,8 +68,13 @@ class EmployeeModel extends CI_Model{
         }
     }
 
-    public function edit($employeeId, $name, $gehalt)
+    public function edit($id, $gehalt, $rechte=0)
     {
-        //passwort evtl über andere funktion
+        $this->db->where("id", $id)->set("gehalt",$gehalt)->set("rechte",$rechte)->update("angestellte");
+    }
+
+    public function changePassword($id, $newPwd)
+    {
+        $this->db->set("passwort", sha1($newPwd))->where("id", $id)->update("angestellte");
     }
 }

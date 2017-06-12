@@ -5,5 +5,6 @@
     echo '<div class="table-responsive">';
     echo $tabledata;
     echo '</div>';
+    echo '<br/>'.$special;
     ?>
 </div>

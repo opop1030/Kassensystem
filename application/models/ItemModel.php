@@ -28,6 +28,10 @@ class ItemModel extends CI_Model{
         $this->db->delete("artikel", "artikelnr = ".$id);
     }
 
+    public function repriceItem($id, $newPrice){
+        $this->db->where("artikelnr", $id)->set("preis", $newPrice)->update("artikel");
+    }
+
     public function editItem($id, $name, $price, $amount)
     {
         $this->db->where("artikelnr", $id)->update("artikel", array("name"=>$name, "bestand"=>$amount, "preis"=>$price));

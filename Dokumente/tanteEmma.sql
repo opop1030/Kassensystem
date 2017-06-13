@@ -26,12 +26,13 @@ CREATE TABLE IF NOT EXISTS `angestellte` (
   PRIMARY KEY (`id`),
   KEY `person_angestellte_fk` (`fi_person`),
   CONSTRAINT `person_angestellte_fk` FOREIGN KEY (`fi_person`) REFERENCES `person` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
--- Exportiere Daten aus Tabelle tekassensystem.angestellte: ~1 rows (ungef‰hr)
+-- Exportiere Daten aus Tabelle tekassensystem.angestellte: ~0 rows (ungef‰hr)
 /*!40000 ALTER TABLE `angestellte` DISABLE KEYS */;
 INSERT INTO `angestellte` (`id`, `fi_person`, `gehalt`, `rechte`, `passwort`) VALUES
-  (1, 1, 0.00, 2, '7288edd0fc3ffcbe93a0cf06e3568e28521687bc');
+	(1, 1, 0.00, 2, '7288edd0fc3ffcbe93a0cf06e3568e28521687bc'),
+	(2, 4, 0.00, 0, '7288edd0fc3ffcbe93a0cf06e3568e28521687bc');
 /*!40000 ALTER TABLE `angestellte` ENABLE KEYS */;
 
 
@@ -48,14 +49,16 @@ CREATE TABLE IF NOT EXISTS `artikel` (
 -- Exportiere Daten aus Tabelle tekassensystem.artikel: ~8 rows (ungef‰hr)
 /*!40000 ALTER TABLE `artikel` DISABLE KEYS */;
 INSERT INTO `artikel` (`artikelnr`, `name`, `bestand`, `preis`) VALUES
-  ('0000000000010', '1,5 l Saskia Quellwasser', 997, 0.19),
-  ('0123456789131', 'Mildes Weizenmischbrot', 100, 1.50),
-  ('0221510739120', '500g Packung Onkel Bens', 49, 3.50),
-  ('1001320013442', 'Gouda Jung 500g', 698, 1.30),
-  ('1212121212121', 'Taschenrechner', 5, 29.99),
-  ('1911199212121', 'Putzschwamm 6er Pack', 300, 4.99),
-  ('5000112546415', '1,25 l Coca Cola', 499, 1.79),
-  ('5555556675661', 'Scheuermittel Chemiekeule', 200, 9.00);
+	('0000000000010', '1,5 l Saskia Quellwasser', 999, 0.18),
+	('0123456789131', 'Mildes Weizenmischbrot', 100, 1.50),
+	('0221510739120', '500g Packung Onkel Bens', 48, 3.50),
+	('100000000010', 'Test123', 1337, 2.00),
+	('1001320013442', 'Gouda Jung 500g', 696, 1.30),
+	('1212121212121', 'Taschenrechner', 5, 29.99),
+	('1234567890123', 'TESTArtikel', 100, 100.00),
+	('1911199212121', 'Putzschwamm 6er Pack', 300, 4.99),
+	('5000112546415', '1,25 l Coca Cola', 496, 1.79),
+	('5555556675661', 'Scheuermittel Chemiekeule', 200, 9.00);
 /*!40000 ALTER TABLE `artikel` ENABLE KEYS */;
 
 
@@ -72,13 +75,15 @@ CREATE TABLE IF NOT EXISTS `bestellpositionen` (
   CONSTRAINT `bp_bestellung_fk` FOREIGN KEY (`id_fi_bestellung`) REFERENCES `bestellung` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Exportiere Daten aus Tabelle tekassensystem.bestellpositionen: ~4 rows (ungef‰hr)
+-- Exportiere Daten aus Tabelle tekassensystem.bestellpositionen: ~9 rows (ungef‰hr)
 /*!40000 ALTER TABLE `bestellpositionen` DISABLE KEYS */;
 INSERT INTO `bestellpositionen` (`id_fi_bestellung`, `id_fi_artikel`, `menge`) VALUES
-  (7, '0000000000010', 2),
-  (8, '0221510739120', 1),
-  (8, '1001320013442', 2),
-  (8, '5000112546415', 1);
+	(12, '0000000000010', 2),
+	(12, '5000112546415', 1),
+	(17, '0221510739120', 1),
+	(17, '5000112546415', 2),
+	(18, '0000000000010', 1),
+	(18, '1001320013442', 1);
 /*!40000 ALTER TABLE `bestellpositionen` ENABLE KEYS */;
 
 
@@ -88,19 +93,20 @@ CREATE TABLE IF NOT EXISTS `bestellung` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `fi_kunde` int(11) NOT NULL,
   `fi_angestellter` int(11) NOT NULL,
-  `datum` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `datum` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `best_kunde_fk` (`fi_kunde`),
   KEY `best_ang_fk` (`fi_angestellter`),
   CONSTRAINT `best_ang_fk` FOREIGN KEY (`fi_angestellter`) REFERENCES `angestellte` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `best_kunde_fk` FOREIGN KEY (`fi_kunde`) REFERENCES `kunde` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
 
--- Exportiere Daten aus Tabelle tekassensystem.bestellung: ~2 rows (ungef‰hr)
+-- Exportiere Daten aus Tabelle tekassensystem.bestellung: ~4 rows (ungef‰hr)
 /*!40000 ALTER TABLE `bestellung` DISABLE KEYS */;
 INSERT INTO `bestellung` (`id`, `fi_kunde`, `fi_angestellter`, `datum`) VALUES
-  (7, 1, 1, '2017-06-07 17:26:42'),
-  (8, 1, 1, '2017-06-07 17:28:05');
+	(12, 2, 1, '2017-06-07 22:39:12'),
+	(17, 1, 1, '2017-06-07 22:45:55'),
+	(18, 2, 1, '2017-06-12 20:21:53');
 /*!40000 ALTER TABLE `bestellung` ENABLE KEYS */;
 
 
@@ -118,8 +124,8 @@ CREATE TABLE IF NOT EXISTS `kunde` (
 -- Exportiere Daten aus Tabelle tekassensystem.kunde: ~2 rows (ungef‰hr)
 /*!40000 ALTER TABLE `kunde` DISABLE KEYS */;
 INSERT INTO `kunde` (`id`, `fi_person`, `umsatz`) VALUES
-  (1, 2, 0.00),
-  (2, 3, 0.00);
+	(1, 2, 0.00),
+	(2, 3, 0.00);
 /*!40000 ALTER TABLE `kunde` ENABLE KEYS */;
 
 
@@ -136,14 +142,15 @@ CREATE TABLE IF NOT EXISTS `person` (
   `tel` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- Exportiere Daten aus Tabelle tekassensystem.person: ~3 rows (ungef‰hr)
 /*!40000 ALTER TABLE `person` DISABLE KEYS */;
 INSERT INTO `person` (`id`, `name`, `vname`, `strasse`, `hausnr`, `plz`, `ort`, `tel`, `email`) VALUES
-  (1, 'Testadmin', '', '', 0, 0, '', '0', ''),
-  (2, 'Schmitz', 'Hans', 'Venloer Straﬂe', 142, 50823, 'Koeln', '0', ''),
-  (3, 'Henriks', 'Harald', 'Schwedik Weg', 12, 27732, '', '', '');
+	(1, 'Testadmin', '', '', 0, 0, '', '0', ''),
+	(2, 'Schmitz', 'Hans', 'Venloer Straﬂe', 142, 50823, 'Koeln', '0', ''),
+	(3, 'Henriks', 'Harald', 'Schwedik Weg', 12, 27732, '', '', ''),
+	(4, 'Testuser', 'Andreas', '', 0, 0, '', '', '');
 /*!40000 ALTER TABLE `person` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

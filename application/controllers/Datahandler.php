@@ -59,8 +59,8 @@ class Datahandler extends CI_Controller{
             $this->table->add_row(
                 array(
                     $entry["name"], $entry["vname"], $entry["datum"], anchor("Datahandler/show_bestellungenDetail/".$entry["id"],'Details','class="btn btn-default"'),
-                    anchor("Datahandler/finishOrder/".$entry["id"], "Bestellung Abschliessen!", "class='btn btn-default'"),
-                    anchor("Datahandler/cancelOrder/".$entry["id"], "Bestellung Canceln!","class='btn btn-default'")
+                    anchor("Datahandler/finishOrder/".$entry["id"], "Abschliessen!", "class='btn btn-default'"),
+                    anchor("Datahandler/cancelOrder/".$entry["id"], "Canceln!","class='btn btn-default'")
                 )
             );
         }
@@ -85,7 +85,7 @@ class Datahandler extends CI_Controller{
                     $this->table->add_row(array($entry["artikelnr"], $entry["name"], $entry{"menge"}, $entry["preis"]));
                     $price += $entry["menge"] * $entry["preis"];
                 }
-                $this->table->add_row(array(anchor("Datahandler/finishOrder/".$id, "Bestellung Abschliessen!","class='btn btn-default'"), anchor("Datahandler/cancelOrder/".$id, "Bestellung Canceln!","class='btn btn-default'")));
+                $this->table->add_row(array(anchor("Datahandler/finishOrder/".$id, "Abschliessen!","class='btn btn-default'"), anchor("Datahandler/cancelOrder/".$id, "Canceln!","class='btn btn-default'")));
                 $pricetext = "Gesammtpreis : ".$price;
                 $this->setPageData("Detail&uuml;bersicht Bestellung Nr. " . $id, "content/DataListing_View.php", $tableheader, $this->table, $pricetext);
             }
@@ -151,39 +151,91 @@ class Datahandler extends CI_Controller{
         $result = $this->ItemModel->getAllItems();
         foreach($result as $entry){
             $deleteUrl = anchor('Datahandler/deleteItem/'.$entry["artikelnr"],'L&ouml;schen', 'class="btn btn-default"');
-            $editUrl = anchor('Datahandler/editItem/'.$entry["artikelnr"], 'Editieren', 'class="btn btn-default"');
-            $this->table->add_row(array($entry["artikelnr"], $entry["name"], $entry["bestand"], $entry["preis"], $editUrl, $deleteUrl));
+            $refillUrl = anchor('Datahandler/show_refill/'.$entry["artikelnr"],'Auff&uuml;llen', 'class="btn btn-default"');
+            $repriceUrl = anchor('Datahandler/show_reprice/'.$entry["artikelnr"],'Preis &auml;ndern!', 'class="btn btn-default"');
+            $this->table->add_row(array($entry["artikelnr"], $entry["name"], $entry["bestand"], $entry["preis"], $refillUrl, $repriceUrl, $deleteUrl));
         }
-        $this->table->add_row(anchor('Datahandler/addItem','Hinzuf&uuml;gen', 'class="btn btn-default"'));
+        $this->table->add_row(anchor('Datahandler/show_registerItem','Hinzuf&uuml;gen', 'class="btn btn-default"'));
         $this->setPageData("Lager&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
 	}
 
-    public function refillItem()
+    public function show_refill($id){
+        $userdata = $this->getLoginData();
+        $this->data['title'] = "Kassensystem Emma - Wareneingang";
+        $this->data['content'] = "content/Wareneingang_View.php";
+        $this->data['status'] = array(
+            'shownavi' => true,
+            'login' => $userdata
+        );
+
+        $this->load->model("ItemModel");
+        $item = $this->ItemModel->getItemData($id);
+        $this->table->set_heading(array('Artikelnr', 'Bezeichnung', 'Menge', 'Einzelpreis'));
+        $this->table->add_row(array($item->artikelnr, $item->name, $item->bestand, $item->preis));
+        $this->data['tabledata'] = $this->table->generate();
+        $this->data['itemId'] = $id;
+        $this->data['special'] = "Eingangsmenge";
+        $this->load->view('includes/content.php', $this->data);
+    }
+
+    public function show_reprice($id){
+        $userdata = $this->getLoginData();
+        $this->data['title'] = "Kassensystem Emma - Preissetzer";
+        $this->data['content'] = "content/Wareneingang_View.php";
+        $this->data['status'] = array(
+            'shownavi' => true,
+            'login' => $userdata
+        );
+
+        $this->load->model("ItemModel");
+        $item = $this->ItemModel->getItemData($id);
+        $this->table->set_heading(array('Artikelnr', 'Bezeichnung', 'Menge', 'Einzelpreis'));
+        $this->table->add_row(array($item->artikelnr, $item->name, $item->bestand, $item->preis));
+        $this->data['tabledata'] = $this->table->generate();
+        $this->data['itemId'] = $id;
+        $this->data['special'] = "Neuer Preis";
+        $this->load->view('includes/content.php', $this->data);
+    }
+
+    public function refillItem($id)
     {
-        $temp = $this->session->code;
-        if (!$temp > 0 && !$temp <= 2)
+        if (!isset($id) && !isset($amount))
         {
             redirect("Datahandler/show_lager");
         }
         else
         {
-            if(!empty($this->input->post("scan")))
+            $input = $this->input->post("amount");
+            if(!empty($input))
             {
-
+                $this->load->model('ItemModel');
+                $this->ItemModel->addCurrendAmountById($id, $input);
+                redirect("Datahandler/show_lager");
+            }
+            else{
+                $this->show_refill($id);
             }
         }
     }
 
-    public function editItem($id)
+    public function repriceItem($id)
     {
-        $temp = $this->session->code;
-        if (!$temp > 0 && !$temp <= 2)
+        if (!isset($id) && !isset($amount))
         {
             redirect("Datahandler/show_lager");
         }
         else
         {
-
+            $input = $this->input->post("amount");
+            if(!empty($input))
+            {
+                $this->load->model('ItemModel');
+                $this->ItemModel->repriceItem($id, $input);
+                redirect("Datahandler/show_lager");
+            }
+            else{
+                $this->show_refill($id);
+            }
         }
     }
 
@@ -196,7 +248,49 @@ class Datahandler extends CI_Controller{
         }
         else
         {
+            if(isset($id)){
+                $this->load->model('ItemModel');
+                $this->ItemModel->deleteItem($id);
+            }
+            else{
+                redirect('Datahandler/show_lager');
+            }
+        }
+    }
 
+    public function show_registerItem(){
+        $userdata = $this->getLoginData();
+        $this->data['title'] = "Kassensystem Emma - Artikelregistrierung";
+        $this->data['content'] = "content/RegisterItem_View.php";
+        $this->data['status'] = array(
+            'shownavi' => true,
+            'login' => $userdata
+        );
+        $this->data['special'] = "";
+        $this->load->view('includes/content.php', $this->data);
+    }
+
+    public function registerItem()
+    {
+        $temp = $this->session->code;
+        if (!$temp > 0 && !$temp <= 2) {
+            redirect("Datahandler/show_lager");
+        }
+        else
+        {
+            $artikelnr = $this->input->post("artikelnr");
+            $name = $this->input->post("bezeichnung");
+            $bestand = $this->input->post("bestand");
+            $preis = $this->input->post("preis");
+            if(!empty($artikelnr)&&!empty($name)&&!empty($bestand)&&!empty($preis))
+            {
+                $this->load->model("ItemModel");
+                $this->ItemModel->addItem($artikelnr, $name, $preis, $bestand);
+                redirect("Datahandler/show_lager");
+            }
+            else{
+                redirect("Datahandler/show_lager");
+            }
         }
     }
 
@@ -211,14 +305,27 @@ class Datahandler extends CI_Controller{
             $this->load->model("CostumerModel");
             $result = $this->CostumerModel->getAllCostumers();
             foreach($result as $entry){
-                $editUri = anchor("Datahandler/editCostumer/".$entry["fi_person"], "Editieren", "class='btn btn-default'");
+                //$editUri = anchor("Datahandler/editCostumer/".$entry["fi_person"], "Editieren", "class='btn btn-default'");
                 $deleteUri = anchor("Datahandler/deleteCostumer/".$entry["fi_person"], "L&ouml;schen", "class='btn btn-default'");
-                $this->table->add_row(array($entry["name"], $entry["vname"], $entry["strasse"], $entry["hausnr"], $entry["plz"], $entry["ort"], $editUri, $deleteUri));
+                $this->table->add_row(array($entry["name"], $entry["vname"], $entry["strasse"], $entry["hausnr"], $entry["plz"], $entry["ort"], $deleteUri));
             }
-            $this->table->add_row(anchor("Datahandler/addCostumer", "Hinzuf&uuml;gen", "class='btn btn-default'"));
+            $this->table->add_row(anchor("Datahandler/show_registerCostumer", "Hinzuf&uuml;gen", "class='btn btn-default'"));
             $tableheader=array("Name", "Vorname", "Strasse", "Hausnummer", "PLZ", "Ort");
             $this->setPageData("Kunden&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
         }
+    }
+
+    public function show_registerCostumer()
+    {
+        $userdata = $this->getLoginData();
+        $this->data['title'] = "Kassensystem Emma - Kundenregistrierung";
+        $this->data['content'] = "content/RegisterCostumer_View.php";
+        $this->data['status'] = array(
+            'shownavi' => true,
+            'login' => $userdata
+        );
+        $this->data['special'] = "";
+        $this->load->view('includes/content.php', $this->data);
     }
 
     public function addCostumer(){
@@ -229,7 +336,31 @@ class Datahandler extends CI_Controller{
         }
         else
         {
+            $name = $this->input->post("name");
+            $vname = $this->input->post("vorname");
+            $adress = $this->input->post("adress");
+            $hanr = $this->input->post("hanr");
+            $plz = $this->input->post("plz");
+            $ort = $this->input->post("ort");
+            $tel = $this->input->post("tel");
+            $email = $this->input->post("email");
 
+            if(!empty($name) && !empty($vname) && !empty($adress) && !empty($hanr) && !empty($plz) && !empty($ort)) {
+                $this->load->model("CostumerModel");
+                if (empty($tel) && empty($email)) {
+                    $this->CostumerModel->addCostumer($name, $vname, $adress, $hanr, $plz, $ort);
+                }
+                elseif(!empty($tel) && empty($email)){
+                    $this->CostumerModel->addCostumer($name, $vname, $adress, $hanr, $plz, $ort, $tel);
+                }
+                else{
+                    $this->CostumerModel->addCostumer($name, $vname, $adress, $hanr, $plz, $ort, $tel, $email);
+                }
+                redirect("Datahandler/show_kunden");
+            }
+            else{
+                $this->show_registerCostumer();
+            }
         }
     }
 
@@ -238,12 +369,16 @@ class Datahandler extends CI_Controller{
         {
             redirect('Datahandler/show_kunden');
         }
-        else
-        {
-
+        else {
+            if (isset($id)) {
+                $this->load->model("CostumerModel");
+                $this->CostumerModel->removeCostumer($id);
+            }
+            redirect('Datahandler/show_kunden');
         }
     }
 
+    //noch nicht drinne aus Zeitgründen und Krankheit nicht
     public function editCostumer($id){
         if ($this->session->code !== 2)
         {
@@ -267,11 +402,13 @@ class Datahandler extends CI_Controller{
             $this->load->model("EmployeeModel");
             $result = $this->EmployeeModel->getAllEmployees();
             foreach($result as $entry){
-                $editUri = anchor("Datahandler/editEmployee/".$entry["fi_person"], "Editieren", "class='btn btn-default'");
-                $deleteUri = anchor("Datahandler/deleteEmployee/".$entry["fi_person"], "L&ouml;schen", "class='btn btn-default'");
-                $this->table->add_row(array($entry["name"], $entry["vname"], $entry["gehalt"], $editUri, $deleteUri));
+                $deleteUri = "";
+                if($entry["rechte"] != 2) {
+                    $deleteUri = anchor("Datahandler/deleteEmployee/" . $entry["fi_person"], "L&ouml;schen", "class='btn btn-default'");
+                }
+                $this->table->add_row(array($entry["name"], $entry["vname"], $entry["gehalt"], $deleteUri));
             }
-            $this->table->add_row(anchor("Datahandler/addEmployee", "Hinzuf&uuml;gen", "class='btn btn-default'"));
+            $this->table->add_row(anchor("Datahandler/show_registerEmployee", "Hinzuf&uuml;gen", "class='btn btn-default'"));
             $tableheader=array("Name", "Vorname", "Gehalt");
             $this->setPageData("Mitarbeiter&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
         }
@@ -297,8 +434,25 @@ class Datahandler extends CI_Controller{
         }
         else
         {
-
+            if(isset($id)){
+                $this->load->model("EmployeeModel");
+                $this->EmployeeModel->delete($id);
+                redirect('Datahandler/show_mitarbeiter');
+            }
         }
+    }
+
+    public function show_registerEmployee()
+    {
+        $userdata = $this->getLoginData();
+        $this->data['title'] = "Kassensystem Emma - Arbeiterregistrierung";
+        $this->data['content'] = "content/RegisterEmployee_View.php";
+        $this->data['status'] = array(
+            'shownavi' => true,
+            'login' => $userdata
+        );
+        $this->data['special'] = "";
+        $this->load->view('includes/content.php', $this->data);
     }
 
     public function addEmployee()
@@ -309,7 +463,18 @@ class Datahandler extends CI_Controller{
         }
         else
         {
-
+            $name = $this->input->post('name');
+            $vname = $this->input->post('vname');
+            $pwd = $this->input->post('pwd');
+            if(!empty($name) && !empty($vname) && !empty($pwd))
+            {
+                $this->load->model("EmployeeModel");
+                $this->EmployeeModel->create($name,$vname,$pwd);
+                redirect("Datahandler/show_mitarbeiter");
+            }
+            else{
+                $this->show_registerEmployee();
+            }
         }
     }
 }

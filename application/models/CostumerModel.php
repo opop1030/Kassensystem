@@ -6,10 +6,10 @@ class CostumerModel extends CI_Model{
         parent::__construct();
     }
 
-    public function addCostumer($name, $vname){
+    public function addCostumer($name, $vname, $adress, $hanr, $plz, $ort, $tel=0, $email=""){
         $qperson = $this
             ->db
-            ->insert("person", array("id"=>null, "name"=>$name, "vname" =>$vname));
+            ->insert("person", array("id"=>null, "name"=>$name, "vname" =>$vname, "strasse" => $adress, "hausnr"=>$hanr, "plz" => $plz, "ort"=>$ort, "tel"=>$tel, "email"=>$email));
         if($qperson !== false){
             //suchen des letzten Eintrags
             $costumerId = $this

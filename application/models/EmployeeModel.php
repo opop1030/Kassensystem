@@ -37,7 +37,7 @@ class EmployeeModel extends CI_Model{
     }
 
     public function getAllEmployees(){
-        $q = $this->db->select("person.name, person.vname, angestellte.fi_person, angestellte.gehalt")->join("person","person.id = angestellte.fi_person")->get("angestellte");
+        $q = $this->db->select("person.name, person.vname, angestellte.fi_person, angestellte.gehalt, angestellte.rechte")->join("person","person.id = angestellte.fi_person")->get("angestellte");
         return $q->result_array();
     }
 

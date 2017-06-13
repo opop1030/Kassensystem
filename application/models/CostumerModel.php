@@ -18,7 +18,7 @@ class CostumerModel extends CI_Model{
                 ->where("name",$name)
                 ->where("vname", $vname)
                 ->get("person")
-                ->last_row(0);
+                ->last_row()->id;
             //einfügen des Kunden
             $this->db->insert("kunde", array("id" => null, "fi_person"=>$costumerId));
         }

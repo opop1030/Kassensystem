@@ -48,23 +48,15 @@ class EmployeeModel extends CI_Model{
         $this->db->set("fi_person",$lastperson)->set("rechte", 0)->set("passwort",sha1($pwd))->insert("angestellte");
     }
 
-    public function delete($employeeId)
+    public function delete($personId)
     {
-        $select_q = $this
-            ->db
-            ->where("id", $employeeId)
-            ->where_not_in("rechte", 2)
-            ->get("angestellte");
-        if($select_q->result() != null){
-            $personId = $select_q->row(0)->fi_person;
+        $code = $this->db->select('rechte')->where('fi_person', $personId)->get('angestellte')->row(0)->rechte;
+        if ($code !== 2) {
             $del_q = $this
                 ->db
                 ->where("id", $personId)
                 ->delete("person");
             return $del_q;
-        }
-        else{
-            return false;
         }
     }
 

@@ -72,6 +72,10 @@ class OrderModel extends CI_Model{
         $this->db->where("id", $id)->delete("bestellung");
     }
 
+    public function changeAmount($idOrder, $idItem, $newAmount){
+        $this->db->where("id_fi_bestellung", $idOrder)->where("id_fi_artikel", $idItem)->set("menge", $newAmount)->update("bestellpositionen");
+    }
+
     public function addItemToOrder($idOrder, $idArticle, $amount)
     {
         if($this->checkItemExists($idArticle, $idOrder) === true)

@@ -107,7 +107,7 @@ class Cashpoint extends CI_Controller{
         if(Count($this->itemList) > 0) {
             $this->load->model("ItemModel");
             foreach ($this->itemList as $item) {
-                $this->ItemModel->setCurrendAmountById($item["id"], $item["amount"] * -1);
+                $this->ItemModel->addCurrendAmountById($item["id"], $item["amount"] * -1);
             }
         }
         $this->clearCart();

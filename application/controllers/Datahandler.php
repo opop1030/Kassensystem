@@ -56,7 +56,13 @@ class Datahandler extends CI_Controller{
         $result = $this->OrderModel->getAllOrders();
         $tableheader=array('Kundenname', 'Kundenvorname', 'Bestelldatum');
         foreach($result as $entry){
-            $this->table->add_row(array($entry["name"], $entry["vname"], $entry["datum"], anchor("Datahandler/show_bestellungenDetail/".$entry["id"],'Details','class="btn btn-default"'), anchor("Datahandler/finishOrder/".$entry["id"], "Bestellung Abschliessen!", "class='btn btn-default'")));
+            $this->table->add_row(
+                array(
+                    $entry["name"], $entry["vname"], $entry["datum"], anchor("Datahandler/show_bestellungenDetail/".$entry["id"],'Details','class="btn btn-default"'),
+                    anchor("Datahandler/finishOrder/".$entry["id"], "Bestellung Abschliessen!", "class='btn btn-default'"),
+                    anchor("Datahandler/cancelOrder/".$entry["id"], "Bestellung Canceln!","class='btn btn-default'")
+                )
+            );
         }
         $this->setPageData("Bestellungs&uuml;bersicht", "content/DataListing_View.php", $tableheader, $this->table);
 	}
@@ -79,20 +85,63 @@ class Datahandler extends CI_Controller{
                     $this->table->add_row(array($entry["artikelnr"], $entry["name"], $entry{"menge"}, $entry["preis"]));
                     $price += $entry["menge"] * $entry["preis"];
                 }
-                $this->table->add_row(array(anchor("Datahandler/addOrderItem/".$id,"Artikel hinzuf&uuml;gen","class='btn btn-default'"), anchor("Datahandler/finishOrder/".$id, "Bestellung Abschliessen!","class='btn btn-default'")));
+                $this->table->add_row(array(anchor("Datahandler/finishOrder/".$id, "Bestellung Abschliessen!","class='btn btn-default'"), anchor("Datahandler/cancelOrder/".$id, "Bestellung Canceln!","class='btn btn-default'")));
                 $pricetext = "Gesammtpreis : ".$price;
                 $this->setPageData("Detail&uuml;bersicht Bestellung Nr. " . $id, "content/DataListing_View.php", $tableheader, $this->table, $pricetext);
             }
         }
     }
 
-    public function addOrderItem($id)
+    //Nicht benutzt da Zeit fehlte zum Testen...
+    public function showOrderEdit($id)
     {
-
+        $this->load->model("OrderModel");
+        $result = null;
+        if(!isset($_SESSION['edit']))
+        {
+            $result = $this->OrderModel->getOrderDetails($id);
+        }
+        else{
+            $result = $this->session->userdata('edit');
+        }
+        $tableheader = array('Artikelnr', 'Bezeichnung', 'Menge', 'Einzelpreis');
+        $price = 0;
+        foreach ($result as $entry) {
+            $id = $entry["artikelnr"];
+            $this->table->add_row(array($entry["artikelnr"], $entry["name"], form_input('amount'.$id,set_value('amount'.$id,$entry{"menge"})), $entry["preis"]));
+            $price += $entry["menge"] * $entry["preis"];
+        }
+        $this->table->add_row(array(anchor("Datahandler/finishOrder/".$id, "Bestellung Abschliessen!","class='btn btn-default'"), anchor("Datahandler/cancelOrder/".$id, "Bestellung Abschliessen!","class='btn btn-default'")));
+        $pricetext = "Gesammtpreis : ".$price."<br/>".form_input('');
+        $this->setPageData("Detail&uuml;bersicht Bestellung Nr. " . $id, "content/DataListing_View.php", $tableheader, $this->table, $pricetext);
     }
 
-    public function finsihOrder($id){
+    public function cancelOrder($id)
+    {
+        if(isset($id)){
+            $this->load->model("OrderModel");
+            $this->load->model("ItemModel");
+            $items = $this->OrderModel->getOrderDetails($id);
+            foreach($items as $item){
+                $this->ItemModel->addCurrendAmountById($item["artikelnr"], $item["menge"]);
+            }
+            $this->finsihOrder($id);
+        }
+        else{
+            redirect("Datahandler/show_bestellungen");
+        }
+    }
 
+    public function finsihOrder($id)
+    {
+        if (isset($id)) {
+            $this->load->model("OrderModel");
+            $this->OrderModel->deleteOrder($id);
+            redirect("Datahandler/show_bestellungen");
+        }
+        else{
+            redirect("Datahandler/show_bestellungen");
+        }
     }
 
 	public function show_lager()

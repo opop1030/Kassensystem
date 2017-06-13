@@ -52,7 +52,8 @@ class ItemModel extends CI_Model{
         return $currendAmount;
     }
 
-    public function setCurrendAmountById($id, $difference){
+    //Methode sollte addCurrendAmountById heissen...
+    public function addCurrendAmountById($id, $difference){
         $currendAmount = $this->getCurrendAmountById($id);
         $newAmount = $currendAmount + $difference;
         $this->db->where("artikelnr", $id)->set("bestand", $newAmount)->update("artikel");
